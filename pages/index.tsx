@@ -1,19 +1,14 @@
-import Head from 'next/head'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import Link from 'next/link'
 
-const inter = Inter({ subsets: ['latin'] })
+export default function Index() {
+  if (typeof(process.env.GCP_API_KEY) == 'undefined') {
+    console.log('No Google Platform API key')
+  }
 
-export default function Home() {
   return (
     <>
-      <Head>
-        <title>My Italian Locations</title>
-        <meta name="description" content="My Italian Locations" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
+      <main className="homePage">
+        <Link href="/admin/locations">Locations</Link>
       </main>
     </>
   )
