@@ -1,11 +1,12 @@
 import '../styles/globals.css'
 import Head from 'next/head'
 import NavBar from '../components/UI/navbar';
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
+import { AuthProvider } from "src/auth/useAuth";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <AuthProvider>
       <Head>
         <title>My Places</title>
         <meta name="description" content="My Locations" />
@@ -14,6 +15,6 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <NavBar />
       <Component {...pageProps} />
-    </>
+    </AuthProvider>
   );
 }

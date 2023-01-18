@@ -22,7 +22,6 @@
 .DS_Store
 *.pem
 my-italian-places-firebase-adminsdk-fp8xz-38a6b687f6.json
-package-lock.json
 
 # debug
 npm-debug.log*

@@ -9,7 +9,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className=" bg-white w-full flex relative justify-between items-center mx-auto px-8 h-20">
+    <nav className=" bg-slate-200 w-full flex relative justify-between items-center mx-auto px-8 h-20">
       {/* <!-- logo --> */}
       <div className="inline-flex">
         <Link href="/">
@@ -54,19 +54,20 @@ const NavBar = () => {
           </div>
         </button>
         <div
-          className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          className={`absolute right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
             isOpen ? "block" : "hidden"
           }`}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
         >
-          <div className="py-1" role="none">
+          <div role="none">
             <a
               href="#"
               className="text-gray-700 block px-4 py-2 text-sm"
               role="menuitem"
               id="menu-item-0"
+              onClick={handleDropDown}
             >
               Account settings
             </a>
@@ -75,6 +76,7 @@ const NavBar = () => {
               className="text-gray-700 block px-4 py-2 text-sm"
               role="menuitem"
               id="menu-item-1"
+              onClick={handleDropDown}
             >
               Sign Out
             </a>
