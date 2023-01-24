@@ -1,12 +1,12 @@
-import '../styles/globals.css'
-import Head from 'next/head'
-import NavBar from '../components/UI/navbar';
-import type { AppProps } from 'next/app';
-import { AuthProvider } from "src/auth/useAuth";
+import "../styles/globals.css";
+import Head from "next/head";
+import NavBar from "../components/UI/navbar";
+import type { AppProps } from "next/app";
+import { AuthContextProvider } from "src/firebase/provider";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    <AuthContextProvider>
       <Head>
         <title>My Places</title>
         <meta name="description" content="My Locations" />
@@ -15,6 +15,6 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <NavBar />
       <Component {...pageProps} />
-    </AuthProvider>
+    </AuthContextProvider>
   );
 }
