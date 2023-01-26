@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useAuth } from "src/firebase/provider";
+import { useAuth } from "@firebase/provider";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -91,7 +91,7 @@ const NavBar = () => {
                 aria-labelledby="menu-button"
               >
                 <div role="none">
-                  <a
+                  <Link
                     href="#"
                     className="text-gray-700 block px-4 py-2 text-sm"
                     role="menuitem"
@@ -99,8 +99,20 @@ const NavBar = () => {
                     onClick={handleDropDown}
                   >
                     Account settings
-                  </a>
-                  <a
+                  </Link>
+                  <Link
+                    href="/admin/places"
+                    className="text-gray-700 block px-4 py-2 text-sm"
+                  >
+                    Manage Places
+                  </Link>
+                  <Link
+                    href="/admin/invite"
+                    className="text-gray-700 block px-4 py-2 text-sm"
+                  >
+                    Send Invitation
+                  </Link>
+                  <Link
                     href="#"
                     className="text-gray-700 block px-4 py-2 text-sm"
                     role="menuitem"
@@ -111,7 +123,7 @@ const NavBar = () => {
                     }}
                   >
                     Logout
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
