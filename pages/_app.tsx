@@ -1,8 +1,8 @@
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import Head from "next/head";
-import NavBar from "../components/UI/navbar";
+import NavBar from "@/UI/navbar";
 import type { AppProps } from "next/app";
-import { AuthContextProvider } from "src/firebase/provider";
+import { AuthContextProvider } from "@/firebase/provider";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

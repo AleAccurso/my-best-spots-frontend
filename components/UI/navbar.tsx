@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useAuth } from "@firebase/provider";
+import { useAuth } from "@/firebase/provider";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
