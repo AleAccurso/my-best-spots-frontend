@@ -70,7 +70,6 @@ const NavBar = () => {
                 onClick={handleDropDown}
               >
                 <div className="flex h-10 w-12 pl-3">
-                  {/* <span>{user.email}</span> */}
                   <svg
                     viewBox="0 0 32 32"
                     xmlns="http://www.w3.org/2000/svg"
