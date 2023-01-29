@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import Head from "next/head";
-import NavBar from "@/components/navbar";
+import NavBar from "@/components/Navbar";
 import type { AppProps } from "next/app";
 import { AuthContextProvider } from "@/firebase/provider";
 

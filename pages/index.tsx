@@ -1,3 +1,5 @@
+import Home from "@/components/Home"
+
 export default function Index() {
   // if (typeof(process.env.GCP_API_KEY) == 'undefined') {
   //   console.log('No Google Platform API key')
@@ -5,8 +7,8 @@ export default function Index() {
 
   return (
     <>
-      <main className="homePage">
-        <span>Home Page</span>
+      <main>
+        <Home />
       </main>
     </>
   )

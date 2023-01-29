@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAuth } from "@/firebase/provider";
+import styles from "./Navbar.module.css";
+
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -27,7 +29,7 @@ const NavBar = () => {
   }
 
   return (
-    <nav className=" bg-slate-200 w-full flex relative justify-between items-center mx-auto px-8 h-20">
+    <nav className={styles.navbar}>
       {/* <!-- logo --> */}
       <div className="inline-flex">
         <Link href="/">

@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+}
+
+.placesList{
+    width: 40%;
+    padding-bottom: 1rem;
+    max-height: calc(100vh - 64px);
+    overflowX: scroll;
+}
+
+.map{
+  width: 60%;
+}
