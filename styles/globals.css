@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --light-grey: #F5F5F5;
+  --light-grey: #f5f5f5;
   --grey: rgba(16, 16, 16, 0.1);
+  --green: #047163;
 }
 
 * {
@@ -17,9 +18,7 @@ html,
 body {
   height: 100%;
   overflow-x: hidden;
-}
-
-body {
+  font-family: 'Manrope', sans-serif;
 }
 
 /* .main {

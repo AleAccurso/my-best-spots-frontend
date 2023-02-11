@@ -11,3 +11,8 @@
   border-bottom: 1px solid var(--grey);
   padding: 4rem;
 }
+
+.loginText {
+  color: var(--green);
+  font-weight: 700;
+}

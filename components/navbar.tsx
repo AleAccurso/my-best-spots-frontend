@@ -4,6 +4,10 @@ import { useState } from "react";
 import { useAuth } from "@/firebase/provider";
 import styles from "./Navbar.module.css";
 import SiteIcon from "@/icons/site-icon.svg";
+import ShareIcon from "@/icons/share.svg";
+import ProfileIcon from "@/icons/profile.svg";
+import ChevronUp from "@/icons/chevron-up.svg";
+import ChevronDown from "@/icons/chevron-down.svg";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -36,84 +40,88 @@ const NavBar = () => {
           <SiteIcon />
         </Link>
       </div>
-
       {/* <!-- end logo --> */}
 
       {/* <!-- login --> */}
       <div className="flex-initial inline-flex relative">
         {!user ? (
           <div>
-            {displayLoginBtn ? <Link href="/auth/login">Log in</Link> : null}
+            {displayLoginBtn ? (
+              <Link href="/auth/login" className={styles.loginText}>
+                <span>Log in</span>
+              </Link>
+            ) : null}
           </div>
         ) : (
-          <div className="flex-initial inline-flex relative">
-            <div className="my-auto">
-              <span>{user.email}</span>
-            </div>
-            <div>
+          <div>
+            <div className="flex-initial inline-flex relative">
+              <button className="flex mt-1">
+                <ShareIcon className="mt-1" />
+                <span className="ml-2.5 leading-7">Share</span>
+              </button>
               <button
                 type="button"
-                className="w-full justify-center focus:outline-none"
+                className="flex ml-10"
                 id="menu-button"
                 aria-expanded="true"
                 aria-haspopup="true"
                 onClick={handleDropDown}
               >
-                <div className="flex h-10 w-12 pl-3">
-                  <svg
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="presentation"
-                    focusable="false"
-                  >
-                    <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z"></path>
-                  </svg>
+                <ProfileIcon />
+                <div className="flex leading-9">
+                  <span className="ml-2.5">Alessandro</span>
+                  <div className="mt-2">
+                    {isOpen ? (
+                      <ChevronUp className="ml-4" />
+                    ) : (
+                      <ChevronDown className="ml-4" />
+                    )}
+                  </div>
                 </div>
               </button>
-              <div
-                className={`absolute right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
-                  isOpen ? "block" : "hidden"
-                }`}
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="menu-button"
-              >
-                <div role="none">
-                  <Link
-                    href="#"
-                    className="text-gray-700 block px-4 py-2 text-sm"
-                    role="menuitem"
-                    id="menu-item-0"
-                    onClick={handleDropDown}
-                  >
-                    Account settings
-                  </Link>
-                  <Link
-                    href="/admin/places"
-                    className="text-gray-700 block px-4 py-2 text-sm"
-                  >
-                    Manage Places
-                  </Link>
-                  <Link
-                    href="/admin/invite"
-                    className="text-gray-700 block px-4 py-2 text-sm"
-                  >
-                    Send Invitation
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-gray-700 block px-4 py-2 text-sm"
-                    role="menuitem"
-                    id="menu-item-1"
-                    onClick={() => {
-                      handleDropDown;
-                      logout();
-                    }}
-                  >
-                    Logout
-                  </Link>
-                </div>
+            </div>
+            <div
+              className={`absolute mt-1 right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+                isOpen ? "block" : "hidden"
+              }`}
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+            >
+              <div role="none">
+                <Link
+                  href="#"
+                  className="text-gray-700 block px-4 py-2 text-sm"
+                  role="menuitem"
+                  id="menu-item-0"
+                  onClick={handleDropDown}
+                >
+                  Change Password
+                </Link>
+                <Link
+                  href="/admin/places"
+                  className="text-gray-700 block px-4 py-2 text-sm"
+                >
+                  Manage Places
+                </Link>
+                <Link
+                  href="/admin/invite"
+                  className="text-gray-700 block px-4 py-2 text-sm"
+                >
+                  Send Invitation
+                </Link>
+                <Link
+                  href="#"
+                  className="text-gray-700 block px-4 py-2 text-sm"
+                  role="menuitem"
+                  id="menu-item-1"
+                  onClick={() => {
+                    handleDropDown;
+                    logout();
+                  }}
+                >
+                  Logout
+                </Link>
               </div>
             </div>
           </div>
