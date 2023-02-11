@@ -26,6 +26,7 @@
   "devDependencies": {
     "@firebase/app-types": "^0.9.0",
     "@firebase/auth-types": "^0.12.0",
+    "@svgr/webpack": "^6.5.1",
     "@types/cookie": "^0.4.0",
     "@types/firebase": "^3.2.1",
     "@types/js-cookie": "^3.0.2",

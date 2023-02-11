@@ -8,7 +8,7 @@ export default function Index() {
   return (
     <>
       <main>
-        <Home />
+        <Home/>
       </main>
     </>
   )

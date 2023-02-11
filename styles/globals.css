@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  --light-grey: #F5F5F5;
+  --grey: rgba(16, 16, 16, 0.1);
 }
 
 * {
@@ -18,10 +20,13 @@ body {
 }
 
 body {
-  background: rgb(180, 210, 213);
-  background: linear-gradient(
-    90deg,
-    rgba(180, 210, 213, 1) 50%,
-    rgba(52, 198, 197, 1) 100%
-  );
 }
+
+/* .main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+} */
