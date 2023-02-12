@@ -48,7 +48,7 @@ const NavBar = () => {
           <div>
             {displayLoginBtn ? (
               <Link href="/auth/login" className={styles.loginText}>
-                <span>Log in</span>
+                <span className="font-bold">Log in</span>
               </Link>
             ) : null}
           </div>
@@ -57,7 +57,7 @@ const NavBar = () => {
             <div className="flex-initial inline-flex relative">
               <button className="flex mt-1">
                 <ShareIcon className="mt-1" />
-                <span className="ml-2.5 leading-7">Share</span>
+                <span className="ml-2.5 leading-7 font-bold">Share</span>
               </button>
               <button
                 type="button"
@@ -69,7 +69,7 @@ const NavBar = () => {
               >
                 <ProfileIcon />
                 <div className="flex leading-9">
-                  <span className="ml-2.5">Alessandro</span>
+                  <span className="ml-2.5 font-bold">Alessandro</span>
                   <div className="mt-2">
                     {isOpen ? (
                       <ChevronUp className="ml-4" />
