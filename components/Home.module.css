@@ -1,7 +1,7 @@
 .placesList {
   width: 40%;
   padding-bottom: 1rem;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px); /* 100px=nav height */
   overflowx: scroll;
   background-color:var(--light-grey);
 }
