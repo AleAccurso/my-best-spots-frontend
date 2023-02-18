@@ -1,8 +1,9 @@
+import NavBar from '@/components/Navbar';
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en" className="h-full overflow-x-hidden">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -15,7 +16,7 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap"
         />
       </Head>
-      <body>
+      <body className="h-full overflow-x-hidden">
         <Main />
         <NextScript />
       </body>

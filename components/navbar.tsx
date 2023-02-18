@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAuth } from "@/firebase/provider";
-import styles from "./Navbar.module.css";
+// Icons
 import SiteIcon from "@/icons/site-icon.svg";
 import ShareIcon from "@/icons/share.svg";
 import ProfileIcon from "@/icons/profile.svg";
@@ -33,21 +33,22 @@ const NavBar = () => {
   }
 
   return (
-    <nav className={styles.navbar}>
+    <nav className="navbar inline-flex w-full h-100 top-0 left-0 justify-between items-center bg-light-grey border border-grey p-12">
       {/* <!-- logo --> */}
-      <div className="inline-flex">
-        <Link href="/">
-          <SiteIcon />
-        </Link>
-      </div>
+      <Link href="/">
+        <SiteIcon />
+      </Link>
       {/* <!-- end logo --> */}
 
       {/* <!-- login --> */}
-      <div className="flex-initial inline-flex relative">
+      <div className="flex-initial inline-flex">
         {!user ? (
           <div>
             {displayLoginBtn ? (
-              <Link href="/auth/login" className={styles.loginText}>
+              <Link
+                href="/auth/login"
+                className="loginText text-green font-bold"
+              >
                 <span className="font-bold">Log in</span>
               </Link>
             ) : null}

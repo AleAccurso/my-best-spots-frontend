@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuth } from "@/firebase/provider";
+import SiteIcon from "@/icons/site-icon.svg";
+import Link from "next/link";
 
 const Login = () => {
   const router = useRouter();
@@ -24,14 +26,16 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full max-w-xs bg-white shadow-md rounded px-8 pt-6 pb-8 mx-auto mt-10">
-      <h1 className="text-center font-bold">Login</h1>
-      <form onSubmit={handleLogin}>
-        <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
-          Email address
-        </label>
+    <div className="loginContainer flex flex-col w-480 h-555 rounded-3xl m-auto">
+      <SiteIcon className="mt-16" />
+      <h1 className="mt-9 font-bold">Welcome</h1>
+      <form
+        onSubmit={handleLogin}
+        className="loginForm flex flex-col mt-10 bg-white"
+      >
+        <label className="text-base font-medium">Email address</label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="emailField h-50 px-3.5 rounded-xl bg-white border border-grey"
           onChange={(e: any) =>
             setData({
               ...data,
@@ -41,13 +45,11 @@ const Login = () => {
           value={data.email}
           required
           type="email"
-          placeholder="Enter email"
+          placeholder="Email"
         />
-        <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
-          Password
-        </label>
+        <label className="text-base font-medium mt-5">Password</label>
         <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-5 leading-tight focus:outline-none focus:shadow-outline"
+          className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
           onChange={(e: any) =>
             setData({
               ...data,
@@ -59,12 +61,19 @@ const Login = () => {
           type="password"
           placeholder="Password"
         />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-        >
-          Login
-        </button>
+        <Link href="/forgot-password" className="my-5">
+          <span className="text-base font-medium underline">
+            Forgot password ?
+          </span>
+        </Link>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="loginBtn w-320 h-55 rounded-3xl bg-green px-2 py-3.5 gap-1.5"
+          >
+            <span className="font-bold text-white">Log in</span>
+          </button>
+        </div>
       </form>
     </div>
   );

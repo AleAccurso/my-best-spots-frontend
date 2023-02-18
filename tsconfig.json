@@ -21,7 +21,8 @@
       "@/UI/*" : ["components/UI/*"],
       "@/firebase/*" : ["src/firebase/*"],
       "@/styles/*": ["styles/*"],
-      "@/icons/*": ["src/assets/icons/*"]
+      "@/icons/*": ["src/assets/icons/*"],
+      "@/src/*": ["src"]
     }
   },
   "include": [
