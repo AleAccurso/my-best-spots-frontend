@@ -7,9 +7,11 @@ import EyeOffIcon from "@/icons/eye-off.svg";
 const ForgotPassword = () => {
   const router = useRouter();
   const { user, login } = useAuth();
+
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [data, setData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -94,7 +96,7 @@ const ForgotPassword = () => {
             type={showNewPassword ? "text" : "password"}
             placeholder="New Password"
           />
-          {!showCurrentPassword ? (
+          {!showNewPassword ? (
             <EyeIcon
               className="absolute z-20 right-2 top-8"
               onClick={handleShowNewPassword}
@@ -121,7 +123,7 @@ const ForgotPassword = () => {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm Password"
           />
-          {!showCurrentPassword ? (
+          {!showConfirmPassword ? (
             <EyeIcon
               className="absolute z-20 right-2 top-8"
               onClick={handleShowConfirmPassword}
