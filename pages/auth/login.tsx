@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <div className="loginContainer flex flex-col w-480 h-555 rounded-3xl m-auto">
       <SiteIcon className="mt-16" />
-      <h1 className="mt-9 font-bold">Welcome</h1>
+      <span className="mt-9 text-3xl font-bold">Welcome</span>
       <form
         onSubmit={handleLogin}
         className="loginForm flex flex-col mt-10 bg-white"

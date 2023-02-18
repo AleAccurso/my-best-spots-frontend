@@ -33,7 +33,7 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="navbar inline-flex w-full h-100 top-0 left-0 justify-between items-center bg-light-grey border border-grey p-12">
+    <nav className="navbar flex w-full h-100 top-0 left-0 justify-between items-center bg-light-grey border border-grey p-12">
       {/* <!-- logo --> */}
       <Link href="/">
         <SiteIcon />
@@ -41,7 +41,7 @@ const NavBar = () => {
       {/* <!-- end logo --> */}
 
       {/* <!-- login --> */}
-      <div className="flex-initial inline-flex">
+      <div className="flex-initial inline-flex relative">
         {!user ? (
           <div>
             {displayLoginBtn ? (
