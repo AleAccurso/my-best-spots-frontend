@@ -1,15 +1,32 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuth } from "@/firebase/provider";
+import EyeIcon from "@/icons/eye.svg";
+import EyeOffIcon from "@/icons/eye-off.svg";
 
 const ForgotPassword = () => {
   const router = useRouter();
   const { user, login } = useAuth();
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+
+  const handleShowCurrentPassword = () => {
+    setShowCurrentPassword(!showCurrentPassword);
+  };
+
+  const handleShowNewPassword = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+
+  const handleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleChangePassword = async (e: any) => {
     e.preventDefault();
@@ -35,49 +52,88 @@ const ForgotPassword = () => {
         onSubmit={handleChangePassword}
         className="loginForm flex flex-col bg-white"
       >
-        <label className="text-base font-medium">Current password</label>
-        <input
-          className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
-          onChange={(e: any) =>
-            setData({
-              ...data,
-              currentPassword: e.target.value,
-            })
-          }
-          value={data.currentPassword}
-          required
-          type="password"
-          placeholder="Current Password"
-        />
-        <label className="text-base font-medium mt-5">New password</label>
-        <input
-          className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
-          onChange={(e: any) =>
-            setData({
-              ...data,
-              newPassword: e.target.value,
-            })
-          }
-          value={data.newPassword}
-          required
-          type="password"
-          placeholder="New Password"
-        />
-        <label className="text-base font-medium mt-5">Confirm password</label>
-        <input
-          className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
-          onChange={(e: any) =>
-            setData({
-              ...data,
-              confirmPassword: e.target.value,
-            })
-          }
-          value={data.confirmPassword}
-          required
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <div className="flex justify-center mt-10">
+        <div className="currentPasswordField relative flex flex-col">
+          <label className="text-base font-medium">Current password</label>
+          <input
+            className="h-50 px-3.5 rounded-xl bg-white border border-grey"
+            onChange={(e: any) =>
+              setData({
+                ...data,
+                currentPassword: e.target.value,
+              })
+            }
+            value={data.currentPassword}
+            required
+            type={showCurrentPassword ? "text" : "password"}
+            placeholder="Current Password"
+          />
+          {!showCurrentPassword ? (
+            <EyeIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowCurrentPassword}
+            />
+          ) : (
+            <EyeOffIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowCurrentPassword}
+            />
+          )}
+        </div>
+        <div className="newPasswordField relative flex flex-col mt-5">
+          <label className="text-base font-medium">New password</label>
+          <input
+            className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
+            onChange={(e: any) =>
+              setData({
+                ...data,
+                newPassword: e.target.value,
+              })
+            }
+            value={data.newPassword}
+            required
+            type={showNewPassword ? "text" : "password"}
+            placeholder="New Password"
+          />
+          {!showCurrentPassword ? (
+            <EyeIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowNewPassword}
+            />
+          ) : (
+            <EyeOffIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowNewPassword}
+            />
+          )}
+        </div>
+        <div className="confirmPasswordField relative flex flex-col mt-5">
+          <label className="text-base font-medium">Confirm password</label>
+          <input
+            className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
+            onChange={(e: any) =>
+              setData({
+                ...data,
+                confirmPassword: e.target.value,
+              })
+            }
+            value={data.confirmPassword}
+            required
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+          />
+          {!showCurrentPassword ? (
+            <EyeIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowConfirmPassword}
+            />
+          ) : (
+            <EyeOffIcon
+              className="absolute z-20 right-2 top-8"
+              onClick={handleShowConfirmPassword}
+            />
+          )}
+        </div>
+        <div className="flex justify-center my-10">
           <button
             type="submit"
             className="loginBtn w-320 h-55 rounded-3xl bg-green px-2 py-3.5 gap-1.5"

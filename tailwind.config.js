@@ -16,10 +16,11 @@ module.exports = {
       },
     },
     colors: {
-      white: "#FFFFFF",
       green: "#047163",
       grey: "#1010101a",
       "light-grey": "#F5F5F5",
+      red: "#E04934",
+      white: "#FFFFFF",
     },
     fontFamily: {
       sans: ["Manrope, sans-serif", { fontFeatureSettings: '"cv11", "ss01"' }],

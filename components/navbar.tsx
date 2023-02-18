@@ -6,8 +6,11 @@ import { useAuth } from "@/firebase/provider";
 import SiteIcon from "@/icons/site-icon.svg";
 import ShareIcon from "@/icons/share.svg";
 import ProfileIcon from "@/icons/profile.svg";
-import ChevronUp from "@/icons/chevron-up.svg";
-import ChevronDown from "@/icons/chevron-down.svg";
+import ChevronUpIcon from "@/icons/chevron-up.svg";
+import ChevronDownIcon from "@/icons/chevron-down.svg";
+import LockIcon from "@/icons/lock.svg";
+import AdminIcon from "@/icons/shield.svg";
+import LogoutIcon from "@/icons/logout.svg";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
@@ -73,9 +76,9 @@ const NavBar = () => {
                   <span className="ml-2.5 font-bold">Alessandro</span>
                   <div className="mt-2">
                     {isOpen ? (
-                      <ChevronUp className="ml-4" />
+                      <ChevronUpIcon className="ml-4" />
                     ) : (
-                      <ChevronDown className="ml-4" />
+                      <ChevronDownIcon className="ml-4" />
                     )}
                   </div>
                 </div>
@@ -89,31 +92,28 @@ const NavBar = () => {
               aria-orientation="vertical"
               aria-labelledby="menu-button"
             >
-              <div role="none">
+              <div role="none" className="text-base leading-4 mt-3 mb-2">
                 <Link
                   href="/profile/change-password"
-                  className="text-gray-700 block px-4 py-2 text-sm"
+                  className="flex px-4 py-2"
                   role="menuitem"
                   id="menu-item-0"
                   onClick={handleDropDown}
                 >
-                  Change Password
+                  <LockIcon />
+                  <span>Change Password</span>
                 </Link>
                 <Link
                   href="/admin/places"
-                  className="text-gray-700 block px-4 py-2 text-sm"
+                  className="flex px-4 py-2"
+                  onClick={handleDropDown}
                 >
-                  Manage Places
-                </Link>
-                <Link
-                  href="/admin/invite"
-                  className="text-gray-700 block px-4 py-2 text-sm"
-                >
-                  Send Invitation
+                  <AdminIcon />
+                  <span>Admin Page</span>
                 </Link>
                 <Link
                   href="#"
-                  className="text-gray-700 block px-4 py-2 text-sm"
+                  className="flex px-4 py-2"
                   role="menuitem"
                   id="menu-item-1"
                   onClick={() => {
@@ -121,7 +121,8 @@ const NavBar = () => {
                     logout();
                   }}
                 >
-                  Logout
+                  <LogoutIcon />
+                  <span className="text-red">Log out</span>
                 </Link>
               </div>
             </div>
