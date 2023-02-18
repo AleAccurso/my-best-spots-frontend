@@ -91,7 +91,7 @@ const NavBar = () => {
             >
               <div role="none">
                 <Link
-                  href="#"
+                  href="/profile/change-password"
                   className="text-gray-700 block px-4 py-2 text-sm"
                   role="menuitem"
                   id="menu-item-0"
