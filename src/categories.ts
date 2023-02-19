@@ -1,0 +1,15 @@
+export const allowedCategories = [
+  "cafe-bar",
+  "gas-station",
+  "hosting",
+  "leisure",
+  "medical",
+  "private-beach",
+  "producer",
+  "public-beach",
+  "religious-site",
+  "restaurant",
+  "shop",
+  "thermal",
+  "tourism",
+];

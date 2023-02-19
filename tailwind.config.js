@@ -12,7 +12,9 @@ module.exports = {
         100: "100px",
         320: "320px",
         480: "480px",
+        500: "500px",
         555: "555px",
+        640: "640px"
       },
     },
     colors: {
@@ -26,5 +28,5 @@ module.exports = {
       sans: ["Manrope, sans-serif", { fontFeatureSettings: '"cv11", "ss01"' }],
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

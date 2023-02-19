@@ -17,20 +17,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*" : ["components/*"],
-      "@/UI/*" : ["components/UI/*"],
-      "@/firebase/*" : ["src/firebase/*"],
+      "@/components/*": ["components/*"],
+      "@/helpers/*": ["helpers/*"],
+      "@/UI/*": ["components/UI/*"],
+      "@/firebase/*": ["src/firebase/*"],
       "@/styles/*": ["styles/*"],
       "@/icons/*": ["src/assets/icons/*"],
       "@/src/*": ["src"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
