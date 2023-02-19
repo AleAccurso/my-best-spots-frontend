@@ -36,7 +36,7 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="navbar flex w-full h-100 top-0 left-0 justify-between items-center bg-light-grey border border-grey p-12">
+    <nav className="navbar flex w-full h-100 top-0 left-0 justify-between items-center bg-mylightgrey border border-mygrey p-12">
       {/* <!-- logo --> */}
       <Link href="/">
         <SiteIcon />
@@ -50,7 +50,7 @@ const NavBar = () => {
             {displayLoginBtn ? (
               <Link
                 href="/auth/login"
-                className="loginText text-green font-bold"
+                className="loginText text-mygreen font-bold"
               >
                 <span className="font-bold">Log in</span>
               </Link>
@@ -85,14 +85,17 @@ const NavBar = () => {
               </button>
             </div>
             <div
-              className={`absolute mt-1 right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+              className={`absolute mt-1 right-0 z-10 w-56 origin-top-right rounded-md bg-mywhite shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
                 isOpen ? "block" : "hidden"
               }`}
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="menu-button"
             >
-              <div role="none" className="text-base leading-4 mt-3 mb-2">
+              <div
+                role="none"
+                className="text-base flex flex-col leading-4 mt-3 mb-2"
+              >
                 <Link
                   href="/profile/change-password"
                   className="flex px-4 py-2"
@@ -122,7 +125,7 @@ const NavBar = () => {
                   }}
                 >
                   <LogoutIcon />
-                  <span className="text-red">Log out</span>
+                  <span className="text-myred">Log out</span>
                 </Link>
               </div>
             </div>

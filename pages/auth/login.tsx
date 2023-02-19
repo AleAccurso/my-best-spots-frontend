@@ -38,12 +38,12 @@ const Login = () => {
       <span className="mt-9 text-3xl font-bold">Welcome</span>
       <form
         onSubmit={handleLogin}
-        className="loginForm flex flex-col mt-10 bg-white"
+        className="loginForm flex flex-col mt-10 bg-mywhite"
       >
         <div className="emailField flex flex-col">
           <label className="text-base font-medium">Email address</label>
           <input
-            className="emailField h-50 px-3.5 rounded-xl bg-white border border-grey"
+            className="emailField h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -59,7 +59,7 @@ const Login = () => {
         <div className="passwordField relative flex flex-col mt-5">
           <label className="text-base font-medium">Password</label>
           <input
-            className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey z-0"
+            className="passwordField h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey z-0"
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -91,9 +91,9 @@ const Login = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-green px-2 py-3.5 gap-1.5"
+            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
           >
-            <span className="font-bold text-white">Log in</span>
+            <span className="font-bold text-mywhite">Log in</span>
           </button>
         </div>
       </form>

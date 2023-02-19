@@ -14,15 +14,15 @@ module.exports = {
         480: "480px",
         500: "500px",
         555: "555px",
-        640: "640px"
+        640: "640px",
       },
     },
     colors: {
-      green: "#047163",
-      grey: "#1010101a",
-      "light-grey": "#F5F5F5",
-      red: "#E04934",
-      white: "#FFFFFF",
+      mygreen: "#047163",
+      mygrey: "#1010101a",
+      mylightgrey: "#F5F5F5",
+      myred: "#E04934",
+      mywhite: "#FFFFFF",
     },
     fontFamily: {
       sans: ["Manrope, sans-serif", { fontFeatureSettings: '"cv11", "ss01"' }],

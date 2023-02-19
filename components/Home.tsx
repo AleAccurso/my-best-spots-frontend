@@ -35,10 +35,10 @@ const HomePage = () => {
   ];
   return (
     <div className="homepage flex h-screen p-0 m-0">
-      <div className="placesList flex w-1/3 pb-4 overflow-scroll bg-light-grey border-l border-b border-grey justify-center">
+      <div className="placesList flex w-1/3 pb-4 overflow-scroll bg-mylightgrey border-l border-b border-mygrey justify-center">
         <SpotsList spotListData={spotsList} />
       </div>
-      <div className="mapContainer w-2/3 bg-light-grey border-x border-b border-grey min-h-[500px]">
+      <div className="mapContainer w-2/3 bg-mylightgrey border-x border-b border-mygrey min-h-[500px]">
         <Image
           src={"/src/images/mapbox.png"}
           alt={"MapBox"}

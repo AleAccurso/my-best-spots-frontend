@@ -52,12 +52,12 @@ const ForgotPassword = () => {
       </span>
       <form
         onSubmit={handleChangePassword}
-        className="loginForm flex flex-col bg-white"
+        className="loginForm flex flex-col bg-mywhite"
       >
         <div className="currentPasswordField relative flex flex-col">
           <label className="text-base font-medium">Current password</label>
           <input
-            className="h-50 px-3.5 rounded-xl bg-white border border-grey"
+            className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -84,7 +84,7 @@ const ForgotPassword = () => {
         <div className="newPasswordField relative flex flex-col mt-5">
           <label className="text-base font-medium">New password</label>
           <input
-            className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
+            className="passwordField h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
         <div className="confirmPasswordField relative flex flex-col mt-5">
           <label className="text-base font-medium">Confirm password</label>
           <input
-            className="passwordField h-50 px-3.5 rounded-xl bg-white border border-grey"
+            className="passwordField h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -138,9 +138,9 @@ const ForgotPassword = () => {
         <div className="flex justify-center my-10">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-green px-2 py-3.5 gap-1.5"
+            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
           >
-            <span className="font-bold text-white">Change password</span>
+            <span className="font-bold text-mywhite">Change password</span>
           </button>
         </div>
       </form>

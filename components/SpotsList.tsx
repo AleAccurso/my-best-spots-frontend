@@ -8,7 +8,7 @@ const SpotsList = (props: ISpotsListProps) => {
   const { spotListData } = props;
 
   return (
-    <div className="spotList flex flex-col divide-y devide-grey">
+    <div className="spotList flex flex-col divide-y devide-mygrey">
       {spotListData.map((spotData, index) => {
         return (
           <div key={index} className="flex flex-col">
