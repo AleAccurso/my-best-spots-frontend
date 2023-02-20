@@ -2,6 +2,7 @@ import ToShareIcon from "@/icons/to-share.svg";
 import ShareAdded from "@/icons/share-added.svg";
 import addressToString from "@/helpers/addressToString";
 import getCategoryIcon from "@/helpers/categoryIcon";
+import { useState } from "react";
 
 export interface ISpot {
   title: string;
@@ -19,6 +20,12 @@ export interface ISpotProps {
 
 const Spot = (props: ISpotProps) => {
   const { spotData } = props;
+  const [isShared, setIsShared] = useState(false);
+
+  const toggleSharedSpot = () => {
+    setIsShared(!isShared);
+    spotData.isShared = !spotData.isShared;
+  };
 
   return (
     <div className="spot flex relative w-500 my-2 items-center">
@@ -28,7 +35,15 @@ const Spot = (props: ISpotProps) => {
         <span className="text-sm">{addressToString(spotData)}</span>
       </div>
       <div className="absolute right-2 top-3">
-        {spotData.isShared ? <ShareAdded /> : <ToShareIcon />}
+        {spotData.isShared ? (
+          <button>
+            <ShareAdded onClick={toggleSharedSpot} />
+          </button>
+        ) : (
+          <button>
+            <ToShareIcon onClick={toggleSharedSpot} />
+          </button>
+        )}
       </div>
     </div>
   );
