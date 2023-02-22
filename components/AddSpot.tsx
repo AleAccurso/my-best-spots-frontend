@@ -4,10 +4,13 @@ import { allowedCategories } from "src/categories";
 import titleCase from "@/helpers/titleCase";
 
 const AddSpot = () => {
+  const [gpsCoord, setGpsCoord] = useState(false);
+
   const [data, setData] = useState({
     name: "",
     category: "",
     address: "",
+    region: "",
     phone: "",
     latitude: 0,
     longitude: 0,
@@ -16,6 +19,10 @@ const AddSpot = () => {
     logged_users: false,
     admin: false,
   });
+
+  const handleGpsCoord = () => {
+    setGpsCoord(!gpsCoord);
+  };
 
   const handleInvitation = async (e: any) => {
     e.preventDefault();
@@ -93,54 +100,87 @@ const AddSpot = () => {
           </select>
         </div>
         <span className="location text-base font-bold mt-10">Location</span>
-        <div className="addressField flex flex-col mt-5">
-          <label className="text-base font-medium">Full address</label>
-          <input
-            className="w-280 h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setData({
-                ...data,
-                address: e.target.value,
-              })
-            }
-            value={data.address}
-            type="text"
-            placeholder="Street + Number + Postal Code + City + Country"
-          />
-        </div>
-        <div className="flex justify-between mt-5">
-          <div className="latitudeField flex flex-col w-300">
-            <label className="text-base font-medium">Latitude</label>
+        <div className="inline-flex mt-3">
+          <span className="mr-3 text-sm font-medium">Address</span>
+          <label className="relative inline-flex items-center mr-5 cursor-pointer">
             <input
-              className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+              type="checkbox"
+              value=""
+              className="sr-only peer"
+              onClick={handleGpsCoord}
+            />
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-mygreen"></div>
+            <span className="ml-3 text-sm font-medium">GPS Coordinates</span>
+          </label>
+        </div>
+        {!gpsCoord ? (
+          <div className="addressField flex flex-col mt-5">
+            <label className="text-base font-medium">Full address</label>
+            <input
+              className="w-280 h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setData({
                   ...data,
-                  latitude: Number(e.target.value),
+                  address: e.target.value,
                 })
               }
-              value={data.latitude}
-              type="number"
-              step="0.0000001"
-              min={-90}
-              max={90}
+              value={data.address}
+              type="text"
+              placeholder="Street + Number + Postal Code + City + Province + Country"
             />
           </div>
-          <div className="longitudeField flex flex-col w-300">
-            <label className="text-base font-medium">Longitude</label>
+        ) : (
+          <div className="flex justify-between mt-5">
+            <div className="latitudeField flex flex-col w-300">
+              <label className="text-base font-medium">Latitude</label>
+              <input
+                className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    latitude: Number(e.target.value),
+                  })
+                }
+                value={data.latitude}
+                type="number"
+                step="0.0000001"
+                min={-90}
+                max={90}
+              />
+            </div>
+            <div className="longitudeField flex flex-col w-300">
+              <label className="text-base font-medium">Longitude</label>
+              <input
+                className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    longitude: Number(e.target.value),
+                  })
+                }
+                value={data.longitude}
+                type="number"
+                step="0.0000001"
+                min={0}
+                max={180}
+              />
+            </div>
+          </div>
+        )}
+        <div className="mt-5">
+          <div className="regionField flex flex-col">
+            <label className="text-base font-medium">Region</label>
             <input
-              className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+              className="w-280 h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setData({
                   ...data,
-                  longitude: Number(e.target.value),
+                  region: e.target.value,
                 })
               }
-              value={data.longitude}
-              type="number"
-              step="0.0000001"
-              min={0}
-              max={180}
+              value={data.region}
+              type="text"
+              placeholder="Region"
             />
           </div>
         </div>
