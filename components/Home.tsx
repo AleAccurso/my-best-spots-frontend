@@ -4,6 +4,28 @@ import { ISpot } from "./Spot";
 // import MapboxMap from "./MapboxMap";
 
 const HomePage = () => {
+
+  const filterConfig = {
+    categoryFilter: [
+      {
+        key: "tourism",
+        value: true,
+      },
+    ],
+    countryFilter: [
+      {
+        key: "italy",
+        value: true,
+      },
+    ],
+    regionFilter: [
+      {
+        key: "abruzzo",
+        value: true,
+      },
+    ],
+  };
+  
   const spotsList: ISpot[] = [
     {
       title: "Grand Place",
