@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="loginContainer flex flex-col w-480 h-555 rounded-3xl m-auto">
+    <div className="loginContainer flex flex-col w-480 h-[555px] rounded-3xl m-auto">
       <SiteIcon className="mt-16" />
       <span className="mt-9 text-3xl font-bold">Welcome</span>
       <form
@@ -91,7 +91,7 @@ const Login = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
+            className="loginBtn w-320 h-[55px] rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
           >
             <span className="font-bold text-mywhite">Log in</span>
           </button>

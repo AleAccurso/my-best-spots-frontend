@@ -41,7 +41,7 @@ const Invite = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5 mt-10"
+            className="loginBtn w-320 h-[55px] rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5 mt-10"
           >
             <span className="font-bold text-mywhite">Send invitation</span>
           </button>

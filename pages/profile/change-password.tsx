@@ -44,7 +44,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="forgotPassword flex flex-col w-480 h-555 rounded-3xl m-auto">
+    <div className="forgotPassword flex flex-col w-480 h-[555px] rounded-3xl m-auto">
       <span className="mt-16 text-3xl font-bold">Set a new password</span>
       <span className="my-10">
         Please remember to choose a unique combination of letters, numbers and
@@ -138,7 +138,7 @@ const ForgotPassword = () => {
         <div className="flex justify-center my-10">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
+            className="loginBtn w-320 h-[55px] rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5"
           >
             <span className="font-bold text-mywhite">Change password</span>
           </button>
