@@ -1,23 +1,87 @@
-import { useState } from "react";
-import ChevronUpIcon from "@/icons/chevron-up.svg";
+import { useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
 import { allowedCategories } from "src/categories";
 import titleCase from "@/helpers/titleCase";
+import { useOnClickOutside } from "usehooks-ts";
+
+export interface CategoryOption {
+  category: string;
+  value: boolean;
+}
 
 const CategoryFilter = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleDropDown = () => {
-    setOpen(!isOpen);
+  const categoryFilter = useRef(null);
+
+  const categoryFilterConfig: CategoryOption[] = [
+    { category: "all", value: true },
+  ];
+
+  allowedCategories.map((category) =>
+    categoryFilterConfig.push({ category: category, value: false })
+  );
+
+  function handleClickOutside(): void {
+    setIsOpen(false);
+  }
+
+  const handleClickInside = () => {
+    setIsOpen(true);
   };
+
+  const countCheckedCheckboxes = () => {
+    let counter = 0
+    allowedCategories.map((category) => {
+       var categoryCheckbox = document.getElementById(
+        category
+      ) as HTMLInputElement;
+      if (categoryCheckbox !== null && categoryCheckbox.checked) {
+        counter++;
+      }
+    })
+    return counter;
+  }
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("id:", e.target.id);
-    console.log("isChecked:", e.target.checked)
+    // Set the concerned filter
+    categoryFilterConfig.map((catConfig) => {
+      if (catConfig.category == e.target.id) {
+        catConfig.value = e.target.checked;
+      }
+    });
+    console.log("categoryFilterConfig", categoryFilterConfig);
   };
 
+  const handleAllCategoriesFilter = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    // Set filter for the "all" category
+    let allCategoryObj = categoryFilterConfig.find(
+      (catConfig) => catConfig.category === "all"
+    );
+    allCategoryObj ? (allCategoryObj.value = e.target.checked) : null;
+
+    // Set the other category filters
+    allowedCategories.map((category) => {
+      var categoryCheckbox = document.getElementById(
+        category
+      ) as HTMLInputElement;
+      if (categoryCheckbox !== null) {
+        categoryCheckbox.checked = false;
+        let categoryobj = categoryFilterConfig.find(
+          (catConfig) => catConfig.category === category
+        );
+        categoryobj ? (categoryobj.value = false) : null;
+      }
+    });
+    console.log("categoryFilterConfig", categoryFilterConfig);
+  };
+
+  useOnClickOutside(categoryFilter, handleClickOutside);
+
   return (
-    <div className="categoryDropCheck relative">
+    <div className="categoryDropCheck relative" ref={categoryFilter}>
       <button
         type="button"
         id="menu-button"
@@ -25,15 +89,15 @@ const CategoryFilter = () => {
         aria-haspopup="true"
         data-dropdown-toggle="dropdownBottom"
         data-dropdown-placement="bottom"
-        onClick={handleDropDown}
+        onClick={handleClickInside}
       >
         <div className="flex leading-9">
           <span>Categories</span>
           <div className="mt-2">
-            {isOpen ? (
-              <ChevronUpIcon className="ml-4" />
-            ) : (
+            {!isOpen ? (
               <ChevronDownIcon className="ml-4" />
+            ) : (
+              <div className="ml-[36px]" />
             )}
           </div>
         </div>
@@ -56,7 +120,8 @@ const CategoryFilter = () => {
                 id="all"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleSetFilter}
+                onChange={handleAllCategoriesFilter}
+                defaultChecked
               />
               <label
                 htmlFor="all"

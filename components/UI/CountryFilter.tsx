@@ -3,18 +3,14 @@ import { useEffect, useState } from "react";
 const countries = ["Belgium", "France", "Swiss", "Italy"];
 
 const CountryFilter = () => {
-  const [data, setData] = useState({
+  const [filter, setFilter] = useState({
     country: "",
   });
 
-  const handleCountryFilter = async (e: any) => {
-    e.preventDefault();
-
-    console.log("formData", data);
-  };
-
   useEffect(() => {
-    console.log(data);
+    if (filter.country != "") {
+      console.log("CountryFilter", filter);
+    }
   });
 
   return (
@@ -23,12 +19,12 @@ const CountryFilter = () => {
         id="countries"
         className="text-base w-full rounded-md bg-mylightgrey border-none border-transparent focus:border-transparent focus:ring-0"
         onChange={(e: any) =>
-          setData({
-            ...data,
+          setFilter({
+            ...filter,
             country: e.target.value,
           })
         }
-        value={data.country}
+        value={filter.country}
       >
         <option defaultValue={""}>Country</option>
         {countries.map((country, key) => {

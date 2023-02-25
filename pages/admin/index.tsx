@@ -50,60 +50,63 @@ const AdminPage = () => {
   // tabs.getActiveTab();
 
   return (
-    <div className="adminTabs w-640 m-auto">
-      <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
-        <ul
-          className="flex flex-wrap -mb-px text-sm font-medium text-center"
-          id="myTab"
-          data-tabs-toggle="#myTabContent"
-          role="tablist"
-        >
-          <li className="mr-2" role="presentation">
-            <button
-              className="inline-block p-4 border-b-2 rounded-t-lg"
-              id="add-spot-tab"
-              data-tabs-target="#add-spot"
-              type="button"
-              role="tab"
-              aria-controls="add-spot"
-              aria-selected="false"
-            >
-              Add spot
-            </button>
-          </li>
-          <li className="mr-2" role="presentation">
-            <button
-              className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-              id="invite-tab"
-              data-tabs-target="#invite"
-              type="button"
-              role="tab"
-              aria-controls="invite"
-              aria-selected="false"
-            >
-              Invite
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div id="myTabContent">
-        <div
-          className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-          id="add-spot"
-          role="tabpanel"
-          aria-labelledby="add-spot-tab"
-        >
-          <AddSpot />
-        </div>
-        <div
-          className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-          id="invite"
-          role="tabpanel"
-          aria-labelledby="invite-tab"
-        >
-          <Invite />
-        </div>
-      </div>
+    // <div className="adminTabs w-640 m-auto">
+    //   <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
+    //     <ul
+    //       className="flex flex-wrap -mb-px text-sm font-medium text-center"
+    //       id="myTab"
+    //       data-tabs-toggle="#myTabContent"
+    //       role="tablist"
+    //     >
+    //       <li className="mr-2" role="presentation">
+    //         <button
+    //           className="inline-block p-4 border-b-2 rounded-t-lg"
+    //           id="add-spot-tab"
+    //           data-tabs-target="#add-spot"
+    //           type="button"
+    //           role="tab"
+    //           aria-controls="add-spot"
+    //           aria-selected="false"
+    //         >
+    //           Add spot
+    //         </button>
+    //       </li>
+    //       <li className="mr-2" role="presentation">
+    //         <button
+    //           className="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+    //           id="invite-tab"
+    //           data-tabs-target="#invite"
+    //           type="button"
+    //           role="tab"
+    //           aria-controls="invite"
+    //           aria-selected="false"
+    //         >
+    //           Invite
+    //         </button>
+    //       </li>
+    //     </ul>
+    //   </div>
+    //   <div id="myTabContent">
+    //     <div
+    //       className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+    //       id="add-spot"
+    //       role="tabpanel"
+    //       aria-labelledby="add-spot-tab"
+    //     >
+    //       <AddSpot />
+    //     </div>
+    //     <div
+    //       className="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+    //       id="invite"
+    //       role="tabpanel"
+    //       aria-labelledby="invite-tab"
+    //     >
+    //       <Invite />
+    //     </div>
+    //   </div>
+    // </div>
+    <div className="invite flex">
+      <AddSpot />
     </div>
   );
 };

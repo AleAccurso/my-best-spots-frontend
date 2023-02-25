@@ -1,7 +1,7 @@
-import { useState } from "react";
-import ChevronUpIcon from "@/icons/chevron-up.svg";
+import { useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
 import titleCase from "@/helpers/titleCase";
+import { useOnClickOutside } from "usehooks-ts";
 
 const regions = [
   "Abruzzo",
@@ -26,20 +26,66 @@ const regions = [
   "Veneto"
 ];
 
-const RegionFilter = () => {
-  const [isOpen, setOpen] = useState(false);
+export interface RegionOption {
+  region: string;
+  value: boolean;
+}
 
-  const handleDropDown = () => {
-    setOpen(!isOpen);
+const RegionFilter = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const regionFilter = useRef(null);
+
+  const regionFilterConfig: RegionOption[] = [];
+
+  regions.map((region) =>
+    regionFilterConfig.push({ region: region, value: false })
+  );
+
+  function handleClickOutside(): void {
+    setIsOpen(false);
+  }
+
+  const handleClickInside = () => {
+    setIsOpen(true);
+  };
+
+  const handleAllRegionsFilter = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    // Set filter for the "all" category
+    let allCategoryObj = regionFilterConfig.find(
+      (catConfig) => catConfig.region === "all"
+    );
+    allCategoryObj ? (allCategoryObj.value = e.target.checked) : null;
+
+    // Set the other category filters
+    regions.map((region) => {
+      var regionCheckbox = document.getElementById(region) as HTMLInputElement;
+      if (regionCheckbox !== null) {
+        regionCheckbox.checked = false;
+        let obj = regionFilterConfig.find(
+          (catConfig) => catConfig.region === region
+        );
+        obj ? (obj.value = false) : null;
+      }
+    });
+    console.log("categoryFilterConfig", regionFilterConfig);
   };
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("id:", e.target.id);
-    console.log("isChecked:", e.target.checked);
+    regionFilterConfig.map((regionConfig) => {
+      if (regionConfig.region == e.target.id) {
+        regionConfig.value = e.target.checked;
+      }
+    });
+    console.log("regionFilterConfig", regionFilterConfig);
   };
 
+  useOnClickOutside(regionFilter, handleClickOutside);
+
   return (
-    <div className="regionFilter relative">
+    <div className="regionFilter relative" ref={regionFilter}>
       <button
         type="button"
         id="menu-button"
@@ -47,15 +93,15 @@ const RegionFilter = () => {
         aria-haspopup="true"
         data-dropdown-toggle="dropdownBottom"
         data-dropdown-placement="bottom"
-        onClick={handleDropDown}
+        onClick={handleClickInside}
       >
         <div className="flex leading-9">
           <span>Region</span>
           <div className="mt-2">
-            {isOpen ? (
-              <ChevronUpIcon className="ml-4" />
-            ) : (
+            {!isOpen ? (
               <ChevronDownIcon className="ml-4" />
+            ) : (
+              <div className="ml-[36px]" />
             )}
           </div>
         </div>
@@ -78,7 +124,8 @@ const RegionFilter = () => {
                 id="all"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleSetFilter}
+                onChange={handleAllRegionsFilter}
+                checked
               />
               <label
                 htmlFor="all"

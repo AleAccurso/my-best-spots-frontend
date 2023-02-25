@@ -23,7 +23,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.42.1",
     "react-map-gl": "^7.0.21",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^3.2.4",
+    "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@firebase/app-types": "^0.9.0",

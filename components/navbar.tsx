@@ -30,7 +30,6 @@ const NavBar = () => {
   const { asPath } = useRouter();
   const inLoginPage = asPath === "/auth/login" ? true : false;
   const inHomePage = asPath === "/" ? true : false;
-  console.log(inHomePage);
 
   let displayLoginBtn: boolean;
   if (user) {
