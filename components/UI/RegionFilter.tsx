@@ -36,7 +36,9 @@ const RegionFilter = () => {
 
   const regionFilter = useRef(null);
 
-  const regionFilterConfig: RegionOption[] = [];
+  const regionFilterConfig: RegionOption[] = [
+    {region: "all", value: true}
+  ];
 
   regions.map((region) =>
     regionFilterConfig.push({ region: region, value: false })
@@ -50,36 +52,96 @@ const RegionFilter = () => {
     setIsOpen(true);
   };
 
-  const handleAllRegionsFilter = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    // Set filter for the "all" category
-    let allCategoryObj = regionFilterConfig.find(
-      (catConfig) => catConfig.region === "all"
-    );
-    allCategoryObj ? (allCategoryObj.value = e.target.checked) : null;
-
-    // Set the other category filters
+  const countCheckedCheckboxes = () => {
+    let counter = 0;
     regions.map((region) => {
-      var regionCheckbox = document.getElementById(region) as HTMLInputElement;
-      if (regionCheckbox !== null) {
-        regionCheckbox.checked = false;
-        let obj = regionFilterConfig.find(
-          (catConfig) => catConfig.region === region
-        );
-        obj ? (obj.value = false) : null;
+      var regionCheckbox = document.getElementById(
+        region
+      ) as HTMLInputElement;
+      if (regionCheckbox !== null && regionCheckbox.checked) {
+        counter++;
       }
     });
-    console.log("categoryFilterConfig", regionFilterConfig);
+    return counter;
   };
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    regionFilterConfig.map((regionConfig) => {
-      if (regionConfig.region == e.target.id) {
-        regionConfig.value = e.target.checked;
+    var regionCheckbox = document.getElementById(
+      e.target.id
+    ) as HTMLInputElement;
+
+    let regionConfig = regionFilterConfig.find(
+      (regionConfig) => regionConfig.region === e.target.id
+    );
+
+    if (regionCheckbox !== null && regionConfig) {
+      regionCheckbox.checked = e.target.checked;
+      regionConfig.value = e.target.checked;
+    }
+
+    if (e.target.id == "all") {
+      handleAllRegionsFilter(true);
+    } else {
+      handleAllRegionsFilter(false);
+    }
+  };
+
+  const resetFilter = () => {
+    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+
+    let allConfig = regionFilterConfig.find(
+      (regionConfig) => regionConfig.region === "all"
+    );
+
+    if (allCheckbox && allConfig) {
+      allCheckbox.checked = true;
+      allConfig.value = true;
+    }
+
+    // Set the other category filters
+    regions.map((region) => {
+      var regionCheckbox = document.getElementById(
+        region
+      ) as HTMLInputElement;
+
+      let regionConfig = regionFilterConfig.find(
+        (regionConfig) => regionConfig.region === region
+      );
+
+      if (regionCheckbox !== null && regionConfig) {
+        regionCheckbox.checked = false;
+        regionConfig.value = false;
       }
     });
-    console.log("regionFilterConfig", regionFilterConfig);
+  };
+
+  const handleAllRegionsFilter = (forceReset: boolean) => {
+    const checkedNb: number = countCheckedCheckboxes();
+
+    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+
+    let allConfig = regionFilterConfig.find(
+      (regionConfig) => regionConfig.region === "all"
+    );
+
+    if (allCheckbox && allConfig) {
+      if (forceReset) {
+        resetFilter();
+      } else {
+        if (checkedNb == 0) {
+          resetFilter();
+        }
+
+        if (checkedNb > 0) {
+          allCheckbox.checked = false;
+          allConfig.value = false;
+        }
+
+        if (checkedNb === regions.length) {
+          resetFilter();
+        }
+      }
+    }
   };
 
   useOnClickOutside(regionFilter, handleClickOutside);
@@ -124,7 +186,7 @@ const RegionFilter = () => {
                 id="all"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleAllRegionsFilter}
+                onChange={handleSetFilter}
                 checked
               />
               <label

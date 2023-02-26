@@ -31,51 +31,95 @@ const CategoryFilter = () => {
   };
 
   const countCheckedCheckboxes = () => {
-    let counter = 0
+    let counter = 0;
     allowedCategories.map((category) => {
-       var categoryCheckbox = document.getElementById(
+      var categoryCheckbox = document.getElementById(
         category
       ) as HTMLInputElement;
       if (categoryCheckbox !== null && categoryCheckbox.checked) {
         counter++;
       }
-    })
-    return counter;
-  }
-
-  const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Set the concerned filter
-    categoryFilterConfig.map((catConfig) => {
-      if (catConfig.category == e.target.id) {
-        catConfig.value = e.target.checked;
-      }
     });
-    console.log("categoryFilterConfig", categoryFilterConfig);
+    return counter;
   };
 
-  const handleAllCategoriesFilter = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    // Set filter for the "all" category
-    let allCategoryObj = categoryFilterConfig.find(
+  const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    var categoryCheckbox = document.getElementById(
+      e.target.id
+    ) as HTMLInputElement;
+
+    let categoryConfig = categoryFilterConfig.find(
+      (catConfig) => catConfig.category === e.target.id
+    );
+
+    if (categoryCheckbox !== null && categoryConfig) {
+      categoryCheckbox.checked = e.target.checked;
+      categoryConfig.value = e.target.checked;
+    }
+
+    if (e.target.id == "all") {
+      handleAllCategoriesFilter(true);
+    } else {
+      handleAllCategoriesFilter(false);
+    }
+  };
+
+  const resetFilter = () => {
+    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+
+    let allConfig = categoryFilterConfig.find(
       (catConfig) => catConfig.category === "all"
     );
-    allCategoryObj ? (allCategoryObj.value = e.target.checked) : null;
+
+    if (allCheckbox && allConfig) {
+      allCheckbox.checked = true;
+      allConfig.value = true;
+    }
 
     // Set the other category filters
     allowedCategories.map((category) => {
       var categoryCheckbox = document.getElementById(
         category
       ) as HTMLInputElement;
-      if (categoryCheckbox !== null) {
+
+      let categoryConfig = categoryFilterConfig.find(
+        (catConfig) => catConfig.category === category
+      );
+
+      if (categoryCheckbox !== null && categoryConfig) {
         categoryCheckbox.checked = false;
-        let categoryobj = categoryFilterConfig.find(
-          (catConfig) => catConfig.category === category
-        );
-        categoryobj ? (categoryobj.value = false) : null;
+        categoryConfig.value = false;
       }
     });
-    console.log("categoryFilterConfig", categoryFilterConfig);
+  };
+
+  const handleAllCategoriesFilter = (forceReset: boolean) => {
+    const checkedNb: number = countCheckedCheckboxes();
+
+    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+
+    let allConfig = categoryFilterConfig.find(
+      (catConfig) => catConfig.category === "all"
+    );
+
+    if (allCheckbox && allConfig) {
+      if (forceReset) {
+        resetFilter();
+      } else {
+        if (checkedNb == 0) {
+          resetFilter();
+        }
+
+        if (checkedNb > 0) {
+          allCheckbox.checked = false;
+          allConfig.value = false;
+        }
+
+        if (checkedNb === allowedCategories.length) {
+          resetFilter();
+        }
+      }
+    }
   };
 
   useOnClickOutside(categoryFilter, handleClickOutside);
@@ -120,7 +164,7 @@ const CategoryFilter = () => {
                 id="all"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleAllCategoriesFilter}
+                onChange={handleSetFilter}
                 defaultChecked
               />
               <label
