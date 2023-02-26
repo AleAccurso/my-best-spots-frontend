@@ -37,7 +37,7 @@ const RegionFilter = () => {
   const regionFilter = useRef(null);
 
   const regionFilterConfig: RegionOption[] = [
-    {region: "all", value: true}
+    { region: "allRegions", value: true },
   ];
 
   regions.map((region) =>
@@ -79,7 +79,7 @@ const RegionFilter = () => {
       regionConfig.value = e.target.checked;
     }
 
-    if (e.target.id == "all") {
+    if (e.target.id == "allRegions") {
       handleAllRegionsFilter(true);
     } else {
       handleAllRegionsFilter(false);
@@ -87,10 +87,10 @@ const RegionFilter = () => {
   };
 
   const resetFilter = () => {
-    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+    var allCheckbox = document.getElementById("allRegions") as HTMLInputElement;
 
     let allConfig = regionFilterConfig.find(
-      (regionConfig) => regionConfig.region === "all"
+      (regionConfig) => regionConfig.region === "allRegions"
     );
 
     if (allCheckbox && allConfig) {
@@ -98,7 +98,7 @@ const RegionFilter = () => {
       allConfig.value = true;
     }
 
-    // Set the other category filters
+    // Set the other region filters
     regions.map((region) => {
       var regionCheckbox = document.getElementById(
         region
@@ -118,10 +118,10 @@ const RegionFilter = () => {
   const handleAllRegionsFilter = (forceReset: boolean) => {
     const checkedNb: number = countCheckedCheckboxes();
 
-    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+    var allCheckbox = document.getElementById("allRegions") as HTMLInputElement;
 
     let allConfig = regionFilterConfig.find(
-      (regionConfig) => regionConfig.region === "all"
+      (regionConfig) => regionConfig.region === "allRegions"
     );
 
     if (allCheckbox && allConfig) {
@@ -131,7 +131,7 @@ const RegionFilter = () => {
         if (checkedNb == 0) {
           resetFilter();
         }
-
+        
         if (checkedNb > 0) {
           allCheckbox.checked = false;
           allConfig.value = false;
@@ -180,17 +180,17 @@ const RegionFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li value={"all"} className="divide-y divide-mygrey">
+          <li value={"allRegions"} className="divide-y divide-mygrey">
             <div className="flex items-center pl-2 rounded">
               <input
-                id="all"
+                id="allRegions"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
                 onChange={handleSetFilter}
-                checked
+                defaultChecked
               />
               <label
-                htmlFor="all"
+                htmlFor="allRegions"
                 className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
               >
                 All Regions

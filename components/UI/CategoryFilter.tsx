@@ -15,7 +15,7 @@ const CategoryFilter = () => {
   const categoryFilter = useRef(null);
 
   const categoryFilterConfig: CategoryOption[] = [
-    { category: "all", value: true },
+    { category: "allCategories", value: true },
   ];
 
   allowedCategories.map((category) =>
@@ -57,7 +57,7 @@ const CategoryFilter = () => {
       categoryConfig.value = e.target.checked;
     }
 
-    if (e.target.id == "all") {
+    if (e.target.id == "allCategories") {
       handleAllCategoriesFilter(true);
     } else {
       handleAllCategoriesFilter(false);
@@ -65,10 +65,10 @@ const CategoryFilter = () => {
   };
 
   const resetFilter = () => {
-    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+    var allCheckbox = document.getElementById("allCategories") as HTMLInputElement;
 
     let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === "all"
+      (catConfig) => catConfig.category === "allCategories"
     );
 
     if (allCheckbox && allConfig) {
@@ -96,10 +96,12 @@ const CategoryFilter = () => {
   const handleAllCategoriesFilter = (forceReset: boolean) => {
     const checkedNb: number = countCheckedCheckboxes();
 
-    var allCheckbox = document.getElementById("all") as HTMLInputElement;
+    var allCheckbox = document.getElementById(
+      "allCategories"
+    ) as HTMLInputElement;
 
     let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === "all"
+      (catConfig) => catConfig.category === "allCategories"
     );
 
     if (allCheckbox && allConfig) {
@@ -158,17 +160,17 @@ const CategoryFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li value={"all"} className="divide-y divide-mygrey">
+          <li value={"allCategories"} className="divide-y divide-mygrey">
             <div className="flex items-center pl-2 rounded">
               <input
-                id="all"
+                id="allCategories"
                 type="checkbox"
                 className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
                 onChange={handleSetFilter}
                 defaultChecked
               />
               <label
-                htmlFor="all"
+                htmlFor="allCategories"
                 className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
               >
                 All Categories
