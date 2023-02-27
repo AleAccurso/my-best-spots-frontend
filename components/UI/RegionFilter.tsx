@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
 import titleCase from "@/helpers/titleCase";
 import { useOnClickOutside } from "usehooks-ts";
@@ -143,6 +143,12 @@ const RegionFilter = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      console.log("regionFilterConfig can be transmitted to parent");
+    }
+  });
 
   useOnClickOutside(regionFilter, handleClickOutside);
 

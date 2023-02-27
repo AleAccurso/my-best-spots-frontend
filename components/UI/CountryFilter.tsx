@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 
-const countries = ["Belgium", "France", "Swiss", "Italy"];
+const countries = ["Belgium", "France", "Switzerland", "Italy"];
 
 const CountryFilter = () => {
   const [filter, setFilter] = useState({
     country: "",
-  });
-
-  useEffect(() => {
-    if (filter.country != "") {
-      console.log("CountryFilter", filter);
-    }
   });
 
   return (

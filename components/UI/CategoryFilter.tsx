@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
 import { allowedCategories } from "src/categories";
 import titleCase from "@/helpers/titleCase";
@@ -123,6 +123,12 @@ const CategoryFilter = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      console.log("catFilterConfig can be transmitted to parent")
+    }
+  })
 
   useOnClickOutside(categoryFilter, handleClickOutside);
 
