@@ -1,51 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
-import titleCase from "@/helpers/titleCase";
 import { useOnClickOutside } from "usehooks-ts";
+import Checkbox from "@/UI/Checkbox";
 
-const regions = [
-  "Abruzzo",
-  "Basilicata",
-  "Calabria",
-  "Campania",
-  "Emilia-Romagna",
-  "Friuli-Venezia Giulia",
-  "Lazio",
-  "Liguria",
-  "Lombardia",
-  "Marche",
-  "Molise",
-  "Piemonte",
-  "Puglia",
-  "Sardinia",
-  "Sicilia",
-  "Trentino Alto Adige",
-  "Toscana",
-  "Umbria",
-  "Valle d'Aosta",
-  "Veneto"
-];
-
-export interface RegionOption {
+export interface IRegionOption {
   region: string;
   value: boolean;
 }
 
-const RegionFilter = () => {
+export interface IRegionFilterProps {
+  availableRegions: string[];
+}
+
+const allRegionsKey = "all-regions";
+
+const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const regionFilter = useRef(null);
 
-  const regionFilterConfig: RegionOption[] = [
-    { region: "allRegions", value: true },
+  const regionFilterConfig: IRegionOption[] = [
+    { region: allRegionsKey, value: true },
   ];
 
-  regions.map((region) =>
+  availableRegions.map((region) =>
     regionFilterConfig.push({ region: region, value: false })
   );
 
   function handleClickOutside(): void {
     setIsOpen(false);
+    console.log("regionFilterConfig:", regionFilterConfig);
   }
 
   const handleClickInside = () => {
@@ -54,10 +38,8 @@ const RegionFilter = () => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    regions.map((region) => {
-      var regionCheckbox = document.getElementById(
-        region
-      ) as HTMLInputElement;
+    availableRegions.map((region) => {
+      var regionCheckbox = document.getElementById(region) as HTMLInputElement;
       if (regionCheckbox !== null && regionCheckbox.checked) {
         counter++;
       }
@@ -79,18 +61,48 @@ const RegionFilter = () => {
       regionConfig.value = e.target.checked;
     }
 
-    if (e.target.id == "allRegions") {
+    if (e.target.id == allRegionsKey) {
       handleAllRegionsFilter(true);
     } else {
       handleAllRegionsFilter(false);
     }
+
+  };
+
+  const handleAllRegionsFilter = (forceReset: boolean) => {
+    const checkedNb: number = countCheckedCheckboxes();
+
+    var allCheckbox = document.getElementById(
+      allRegionsKey
+    ) as HTMLInputElement;
+
+    let allConfig = regionFilterConfig.find(
+      (regionConfig) => regionConfig.region === allRegionsKey
+    );
+
+    if (allCheckbox && allConfig) {
+      if (forceReset) {
+        resetFilter();
+      } else {
+        if (checkedNb == 0 || checkedNb == availableRegions.length) {
+          resetFilter();
+        }
+
+        if (checkedNb > 0) {
+          allCheckbox.checked = false;
+          allConfig.value = false;
+        }
+      }
+    }
   };
 
   const resetFilter = () => {
-    var allCheckbox = document.getElementById("allRegions") as HTMLInputElement;
+    var allCheckbox = document.getElementById(
+      allRegionsKey
+    ) as HTMLInputElement;
 
     let allConfig = regionFilterConfig.find(
-      (regionConfig) => regionConfig.region === "allRegions"
+      (regionConfig) => regionConfig.region === allRegionsKey
     );
 
     if (allCheckbox && allConfig) {
@@ -99,10 +111,8 @@ const RegionFilter = () => {
     }
 
     // Set the other region filters
-    regions.map((region) => {
-      var regionCheckbox = document.getElementById(
-        region
-      ) as HTMLInputElement;
+    availableRegions.map((region) => {
+      var regionCheckbox = document.getElementById(region) as HTMLInputElement;
 
       let regionConfig = regionFilterConfig.find(
         (regionConfig) => regionConfig.region === region
@@ -115,38 +125,9 @@ const RegionFilter = () => {
     });
   };
 
-  const handleAllRegionsFilter = (forceReset: boolean) => {
-    const checkedNb: number = countCheckedCheckboxes();
-
-    var allCheckbox = document.getElementById("allRegions") as HTMLInputElement;
-
-    let allConfig = regionFilterConfig.find(
-      (regionConfig) => regionConfig.region === "allRegions"
-    );
-
-    if (allCheckbox && allConfig) {
-      if (forceReset) {
-        resetFilter();
-      } else {
-        if (checkedNb == 0) {
-          resetFilter();
-        }
-        
-        if (checkedNb > 0) {
-          allCheckbox.checked = false;
-          allConfig.value = false;
-        }
-
-        if (checkedNb === regions.length) {
-          resetFilter();
-        }
-      }
-    }
-  };
-
   useEffect(() => {
     if (!isOpen) {
-      console.log("regionFilterConfig can be transmitted to parent");
+      // console.log("regionFilter:", regionFilterConfig);
     }
   });
 
@@ -186,42 +167,23 @@ const RegionFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li value={"allRegions"} className="divide-y divide-mygrey">
-            <div className="flex items-center pl-2 rounded">
-              <input
-                id="allRegions"
-                type="checkbox"
-                className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleSetFilter}
-                defaultChecked
-              />
-              <label
-                htmlFor="allRegions"
-                className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-              >
-                All Regions
-              </label>
-            </div>
+          <li className="divide-y divide-mygrey">
+            <Checkbox
+              label={allRegionsKey}
+              isCheckedByDefault={true}
+              handleSetFilter={handleSetFilter}
+            />
             <div className="divide-y divide-gray-100"></div>
           </li>
 
-          {regions.map((region, key) => {
+          {availableRegions.map((region, key) => {
             return (
               <li key={key} value={region}>
-                <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <input
-                    id={region}
-                    type="checkbox"
-                    className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                    onChange={handleSetFilter}
-                  />
-                  <label
-                    htmlFor={region}
-                    className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                  >
-                    {titleCase(region.replace("-", " "))}
-                  </label>
-                </div>
+                <Checkbox
+                  label={region}
+                  isCheckedByDefault={false}
+                  handleSetFilter={handleSetFilter}
+                />
               </li>
             );
           })}

@@ -13,19 +13,13 @@ import LockIcon from "@/icons/lock.svg";
 import AdminIcon from "@/icons/shield.svg";
 import LogoutIcon from "@/icons/logout.svg";
 
-//Components
-import CategoryFilter from "@/components/UI/CategoryFilter";
-import RegionFilter from "./UI/RegionFilter";
-import CountryFilter from "./UI/CountryFilter";
+// Components
+import SpotsFilters from "@/UI/SpotsFilters";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
 
   const [isOpen, setOpen] = useState(false);
-
-  const handleDropDown = () => {
-    setOpen(!isOpen);
-  };
 
   const { asPath } = useRouter();
   const inLoginPage = asPath === "/auth/login" ? true : false;
@@ -41,6 +35,10 @@ const NavBar = () => {
       displayLoginBtn = true;
     }
   }
+
+  const handleDropDown = () => {
+    setOpen(!isOpen);
+  };
 
   return (
     <div className="flex flex-col border border-mygrey px-[70px] pt-5 bg-mylightgrey">
@@ -141,17 +139,7 @@ const NavBar = () => {
           {/* <!-- end login --> */}
         </div>
       </nav>
-      <div>
-        {inHomePage ? (
-          <div className="inline-flex z-10 place-content-between">
-            <CategoryFilter />
-            <div className="ml-16 mr-20">
-              <CountryFilter />
-            </div>
-            <RegionFilter />
-          </div>
-        ) : null}
-      </div>
+      <div className="filtersContainer">{inHomePage && <SpotsFilters />}</div>
     </div>
   );
 };

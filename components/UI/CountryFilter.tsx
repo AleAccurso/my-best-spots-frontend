@@ -3,22 +3,19 @@ import { useEffect, useState } from "react";
 const countries = ["Belgium", "France", "Switzerland", "Italy"];
 
 const CountryFilter = () => {
-  const [filter, setFilter] = useState({
-    country: "",
-  });
+  const [countryFilter, setCountryFilter] = useState("");
+
+  useEffect(() => {
+    console.log("country:", countryFilter);
+  })
 
   return (
     <div className="countryFilter relative">
       <select
         id="countries"
         className="text-base w-full rounded-md bg-mylightgrey border-none border-transparent focus:border-transparent focus:ring-0"
-        onChange={(e: any) =>
-          setFilter({
-            ...filter,
-            country: e.target.value,
-          })
-        }
-        value={filter.country}
+        onChange={(e: any) => setCountryFilter(e.target.value)}
+        value={countryFilter}
       >
         <option defaultValue={""}>Country</option>
         {countries.map((country, key) => {

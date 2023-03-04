@@ -1,29 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
-import { allowedCategories } from "src/categories";
-import titleCase from "@/helpers/titleCase";
 import { useOnClickOutside } from "usehooks-ts";
+import Checkbox from "@/UI/Checkbox";
 
-export interface CategoryOption {
+export interface ICategoryOption {
   category: string;
   value: boolean;
 }
 
-const CategoryFilter = () => {
+export interface ICategoryFilterProps {
+  availableCategories: string[];
+}
+
+const allCategoriesKey = "all-categories";
+
+const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const categoryFilter = useRef(null);
 
-  const categoryFilterConfig: CategoryOption[] = [
-    { category: "allCategories", value: true },
+  const categoryFilterConfig: ICategoryOption[] = [
+    { category: allCategoriesKey, value: true },
   ];
 
-  allowedCategories.map((category) =>
+  availableCategories.map((category) =>
     categoryFilterConfig.push({ category: category, value: false })
   );
 
   function handleClickOutside(): void {
     setIsOpen(false);
+    console.log("categoryFilterConfig:", categoryFilterConfig);
   }
 
   const handleClickInside = () => {
@@ -32,7 +38,7 @@ const CategoryFilter = () => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    allowedCategories.map((category) => {
+    availableCategories.map((category) => {
       var categoryCheckbox = document.getElementById(
         category
       ) as HTMLInputElement;
@@ -44,6 +50,7 @@ const CategoryFilter = () => {
   };
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     var categoryCheckbox = document.getElementById(
       e.target.id
     ) as HTMLInputElement;
@@ -57,18 +64,47 @@ const CategoryFilter = () => {
       categoryConfig.value = e.target.checked;
     }
 
-    if (e.target.id == "allCategories") {
+    if (e.target.id == allCategoriesKey) {
       handleAllCategoriesFilter(true);
     } else {
       handleAllCategoriesFilter(false);
     }
   };
 
-  const resetFilter = () => {
-    var allCheckbox = document.getElementById("allCategories") as HTMLInputElement;
+  const handleAllCategoriesFilter = (forceReset: boolean) => {
+    const checkedNb: number = countCheckedCheckboxes();
+
+    var allCheckbox = document.getElementById(
+      allCategoriesKey
+    ) as HTMLInputElement;
 
     let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === "allCategories"
+      (catConfig) => catConfig.category === allCategoriesKey
+    );
+
+    if (allCheckbox && allConfig) {
+      if (forceReset) {
+        resetFilter();
+      } else {
+        if (checkedNb == 0 || checkedNb === availableCategories.length) {
+          resetFilter();
+        }
+
+        if (checkedNb > 0) {
+          allCheckbox.checked = false;
+          allConfig.value = false;
+        }
+      }
+    }
+  };
+
+  const resetFilter = () => {
+    var allCheckbox = document.getElementById(
+      allCategoriesKey
+    ) as HTMLInputElement;
+
+    let allConfig = categoryFilterConfig.find(
+      (catConfig) => catConfig.category === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
@@ -77,7 +113,7 @@ const CategoryFilter = () => {
     }
 
     // Set the other category filters
-    allowedCategories.map((category) => {
+    availableCategories.map((category) => {
       var categoryCheckbox = document.getElementById(
         category
       ) as HTMLInputElement;
@@ -93,42 +129,11 @@ const CategoryFilter = () => {
     });
   };
 
-  const handleAllCategoriesFilter = (forceReset: boolean) => {
-    const checkedNb: number = countCheckedCheckboxes();
-
-    var allCheckbox = document.getElementById(
-      "allCategories"
-    ) as HTMLInputElement;
-
-    let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === "allCategories"
-    );
-
-    if (allCheckbox && allConfig) {
-      if (forceReset) {
-        resetFilter();
-      } else {
-        if (checkedNb == 0) {
-          resetFilter();
-        }
-
-        if (checkedNb > 0) {
-          allCheckbox.checked = false;
-          allConfig.value = false;
-        }
-
-        if (checkedNb === allowedCategories.length) {
-          resetFilter();
-        }
-      }
-    }
-  };
-
   useEffect(() => {
     if (!isOpen) {
-      console.log("catFilterConfig can be transmitted to parent")
+      // console.log("category filter", categoryFilterConfig);
     }
-  })
+  });
 
   useOnClickOutside(categoryFilter, handleClickOutside);
 
@@ -166,42 +171,22 @@ const CategoryFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li value={"allCategories"} className="divide-y divide-mygrey">
-            <div className="flex items-center pl-2 rounded">
-              <input
-                id="allCategories"
-                type="checkbox"
-                className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                onChange={handleSetFilter}
-                defaultChecked
-              />
-              <label
-                htmlFor="allCategories"
-                className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-              >
-                All Categories
-              </label>
-            </div>
-            <div className="divide-y divide-gray-100"></div>
+          <li className="divide-y divide-mygrey">
+            <Checkbox
+              label={allCategoriesKey}
+              isCheckedByDefault={true}
+              handleSetFilter={handleSetFilter}
+            />
           </li>
 
-          {allowedCategories.map((category, key) => {
+          {availableCategories.map((category, key) => {
             return (
               <li key={key} value={category}>
-                <div className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <input
-                    id={category}
-                    type="checkbox"
-                    className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-                    onChange={handleSetFilter}
-                  />
-                  <label
-                    htmlFor={category}
-                    className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                  >
-                    {titleCase(category.replace("-", " "))}
-                  </label>
-                </div>
+                <Checkbox
+                  label={category}
+                  isCheckedByDefault={false}
+                  handleSetFilter={handleSetFilter}
+                />
               </li>
             );
           })}
