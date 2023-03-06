@@ -24,7 +24,8 @@
       "@/firebase/*": ["src/firebase/*"],
       "@/styles/*": ["styles/*"],
       "@/icons/*": ["src/assets/icons/*"],
-      "@/hooks/*": ["src/hooks/*"]
+      "@/hooks/*": ["src/hooks/*"],
+      "@/interfaces/*": ["src/interfaces/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

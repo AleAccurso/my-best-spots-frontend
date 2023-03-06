@@ -2,7 +2,12 @@ import CategoryFilter from "./CategoryFilter";
 import CountryFilter from "./CountryFilter";
 import RegionFilter from "./RegionFilter";
 
-import { allowedCategories } from "@/src/categories";
+import { categories } from "@/src/categories";
+import { ChangeEvent, useEffect, useState } from "react";
+
+const countries = ["Belgium", "France", "Switzerland", "Italy"];
+
+export const defaultCountry = "Country";
 
 const regions = [
   "Abruzzo",
@@ -28,13 +33,22 @@ const regions = [
 ];
 
 const SpotsFilters = () => {
+  const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
+
+  const setCountryFilter = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(e.target.value);
+  };
+  
   return (
     <div className="spotsFilters inline-flex z-10 place-content-between">
-      <CategoryFilter availableCategories={allowedCategories} />
+      <CategoryFilter categories={categories} />
       <div className="ml-16 mr-20">
-        <CountryFilter />
+        <CountryFilter
+          countries={countries}
+          setCountryFilter={setCountryFilter}
+        />
       </div>
-      <RegionFilter availableRegions={regions} />
+      { selectedCountry != "Country" && <RegionFilter regions={regions} /> }
     </div>
   );
 };

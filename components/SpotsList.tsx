@@ -1,8 +1,5 @@
-import Spot, { ISpot } from "./Spot";
-
-export interface ISpotsListProps {
-  spotListData: ISpot[];
-}
+import { ISpotsListProps } from "@/src/interfaces/spot";
+import Spot from "./Spot";
 
 const SpotsList = (props: ISpotsListProps) => {
   const { spotListData } = props;

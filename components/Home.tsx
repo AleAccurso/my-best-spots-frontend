@@ -1,6 +1,7 @@
 import Image from "next/image";
 import SpotsList from "@/components/SpotsList";
-import { ISpot } from "./Spot";
+import { ISpot } from "@/src/interfaces/spot";
+
 // import MapboxMap from "./MapboxMap";
 
 const HomePage = () => {

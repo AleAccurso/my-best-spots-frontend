@@ -1,13 +1,14 @@
-import titleCase from "@/helpers/titleCase";
 import { ChangeEvent } from "react";
 
 export interface ICheckboxProps {
+  id: string;
   label: string;
   isCheckedByDefault: boolean;
   handleSetFilter: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Checkbox = ({
+  id,
   label,
   isCheckedByDefault,
   handleSetFilter,
@@ -15,7 +16,7 @@ const Checkbox = ({
   return (
     <div className="flex items-center pl-2 rounded">
       <input
-        id={label}
+        id={id}
         type="checkbox"
         value={label}
         className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
@@ -26,7 +27,7 @@ const Checkbox = ({
         htmlFor={label}
         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
       >
-        {titleCase(label.replace("-", " "))}
+        {label}
       </label>
     </div>
   );

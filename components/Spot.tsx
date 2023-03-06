@@ -3,20 +3,7 @@ import ShareAdded from "@/icons/share-added.svg";
 import addressToString from "@/helpers/addressToString";
 import getCategoryIcon from "@/helpers/categoryIcon";
 import { useState } from "react";
-
-export interface ISpot {
-  title: string;
-  address: string;
-  postal_code: string;
-  city: string;
-  country_code: string;
-  category: string;
-  isShared: boolean;
-}
-
-export interface ISpotProps {
-  spotData: ISpot;
-}
+import { ISpotProps } from "@/src/interfaces/spot";
 
 const Spot = (props: ISpotProps) => {
   const { spotData } = props;

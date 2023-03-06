@@ -1,35 +1,41 @@
+// Hooks
 import { useEffect, useRef, useState } from "react";
-import ChevronDownIcon from "@/icons/chevron-down.svg";
 import { useOnClickOutside } from "usehooks-ts";
+
+// UI components
+import ChevronDownIcon from "@/icons/chevron-down.svg";
 import Checkbox from "@/UI/Checkbox";
 
-export interface ICategoryOption {
-  category: string;
-  value: boolean;
-}
+// Interfaces
+import {
+  ICategoryFilterProps,
+  ICategoryCheckboxOption,
+} from "@/src/interfaces/category";
 
-export interface ICategoryFilterProps {
-  availableCategories: string[];
-}
-
+// Constants
 const allCategoriesKey = "all-categories";
+const allCategoriesName = "All Categories";
 
-const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
+const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const categoryFilter = useRef(null);
+  const categoryFilterRef = useRef(null);
 
-  const categoryFilterConfig: ICategoryOption[] = [
-    { category: allCategoriesKey, value: true },
+  const categoryCheckboxesConfig: ICategoryCheckboxOption[] = [
+    { category_key: allCategoriesKey, value: true },
   ];
 
-  availableCategories.map((category) =>
-    categoryFilterConfig.push({ category: category, value: false })
-  );
+  categories.map((category) => {
+    const categoryCheckboxOption: ICategoryCheckboxOption = {
+      category_key: category.category_key,
+      value: false,
+    };
+    categoryCheckboxesConfig.push(categoryCheckboxOption);
+  });
 
   function handleClickOutside(): void {
     setIsOpen(false);
-    console.log("categoryFilterConfig:", categoryFilterConfig);
+    // TODO: Apply filter to list of spots
   }
 
   const handleClickInside = () => {
@@ -38,9 +44,9 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    availableCategories.map((category) => {
+    categories.map((category) => {
       var categoryCheckbox = document.getElementById(
-        category
+        category.category_key
       ) as HTMLInputElement;
       if (categoryCheckbox !== null && categoryCheckbox.checked) {
         counter++;
@@ -50,18 +56,17 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
   };
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-
     var categoryCheckbox = document.getElementById(
       e.target.id
     ) as HTMLInputElement;
 
-    let categoryConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === e.target.id
+    let categoryCheckboxConfig = categoryCheckboxesConfig.find(
+      (catConfig) => catConfig.category_key === e.target.id
     );
 
-    if (categoryCheckbox !== null && categoryConfig) {
+    if (categoryCheckbox !== null && categoryCheckboxConfig) {
       categoryCheckbox.checked = e.target.checked;
-      categoryConfig.value = e.target.checked;
+      categoryCheckboxConfig.value = e.target.checked;
     }
 
     if (e.target.id == allCategoriesKey) {
@@ -78,15 +83,15 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
       allCategoriesKey
     ) as HTMLInputElement;
 
-    let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === allCategoriesKey
+    let allConfig = categoryCheckboxesConfig.find(
+      (catConfig) => catConfig.category_key === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
       if (forceReset) {
         resetFilter();
       } else {
-        if (checkedNb == 0 || checkedNb === availableCategories.length) {
+        if (checkedNb == 0 || checkedNb === categories.length) {
           resetFilter();
         }
 
@@ -103,8 +108,8 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
       allCategoriesKey
     ) as HTMLInputElement;
 
-    let allConfig = categoryFilterConfig.find(
-      (catConfig) => catConfig.category === allCategoriesKey
+    let allConfig = categoryCheckboxesConfig.find(
+      (catConfig) => catConfig.category_key === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
@@ -113,13 +118,13 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
     }
 
     // Set the other category filters
-    availableCategories.map((category) => {
+    categories.map((category) => {
       var categoryCheckbox = document.getElementById(
-        category
+        category.category_key
       ) as HTMLInputElement;
 
-      let categoryConfig = categoryFilterConfig.find(
-        (catConfig) => catConfig.category === category
+      let categoryConfig = categoryCheckboxesConfig.find(
+        (catConfig) => catConfig.category_key === category.category_key
       );
 
       if (categoryCheckbox !== null && categoryConfig) {
@@ -131,14 +136,14 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      // console.log("category filter", categoryFilterConfig);
+      // console.log("category filter", categoryCheckboxesConfig);
     }
   });
 
-  useOnClickOutside(categoryFilter, handleClickOutside);
+  useOnClickOutside(categoryFilterRef, handleClickOutside);
 
   return (
-    <div className="categoryDropCheck relative" ref={categoryFilter}>
+    <div className="categoryDropCheck relative" ref={categoryFilterRef}>
       <button
         type="button"
         id="menu-button"
@@ -173,17 +178,20 @@ const CategoryFilter = ({ availableCategories }: ICategoryFilterProps) => {
         >
           <li className="divide-y divide-mygrey">
             <Checkbox
-              label={allCategoriesKey}
+              id={allCategoriesKey}
+              label={allCategoriesName}
               isCheckedByDefault={true}
               handleSetFilter={handleSetFilter}
             />
+            <div className="divide-y divide-gray-100"></div>
           </li>
 
-          {availableCategories.map((category, key) => {
+          {categories.map((category, key) => {
             return (
-              <li key={key} value={category}>
+              <li key={key} value={category.category_key}>
                 <Checkbox
-                  label={category}
+                  id={category.category_key}
+                  label={category.name}
                   isCheckedByDefault={false}
                   handleSetFilter={handleSetFilter}
                 />

@@ -2,34 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/icons/chevron-down.svg";
 import { useOnClickOutside } from "usehooks-ts";
 import Checkbox from "@/UI/Checkbox";
-
-export interface IRegionOption {
-  region: string;
-  value: boolean;
-}
-
-export interface IRegionFilterProps {
-  availableRegions: string[];
-}
+import { IRegionFilterProps, IRegionOption } from "@/src/interfaces/region";
 
 const allRegionsKey = "all-regions";
+const allRegionsName = "All Regions";
 
-const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
+const RegionFilter = ({ regions }: IRegionFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const regionFilter = useRef(null);
+  const regionFilterRef = useRef(null);
 
-  const regionFilterConfig: IRegionOption[] = [
+  const regionFilter: IRegionOption[] = [
     { region: allRegionsKey, value: true },
   ];
 
-  availableRegions.map((region) =>
-    regionFilterConfig.push({ region: region, value: false })
+  regions.map((region) =>
+    regionFilter.push({ region: region, value: false })
   );
 
   function handleClickOutside(): void {
     setIsOpen(false);
-    console.log("regionFilterConfig:", regionFilterConfig);
+    // TODO: Apply filter to list of spots
   }
 
   const handleClickInside = () => {
@@ -38,7 +31,7 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    availableRegions.map((region) => {
+    regions.map((region) => {
       var regionCheckbox = document.getElementById(region) as HTMLInputElement;
       if (regionCheckbox !== null && regionCheckbox.checked) {
         counter++;
@@ -52,7 +45,7 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
       e.target.id
     ) as HTMLInputElement;
 
-    let regionConfig = regionFilterConfig.find(
+    let regionConfig = regionFilter.find(
       (regionConfig) => regionConfig.region === e.target.id
     );
 
@@ -76,7 +69,7 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
       allRegionsKey
     ) as HTMLInputElement;
 
-    let allConfig = regionFilterConfig.find(
+    let allConfig = regionFilter.find(
       (regionConfig) => regionConfig.region === allRegionsKey
     );
 
@@ -84,7 +77,7 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
       if (forceReset) {
         resetFilter();
       } else {
-        if (checkedNb == 0 || checkedNb == availableRegions.length) {
+        if (checkedNb == 0 || checkedNb == regions.length) {
           resetFilter();
         }
 
@@ -101,7 +94,7 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
       allRegionsKey
     ) as HTMLInputElement;
 
-    let allConfig = regionFilterConfig.find(
+    let allConfig = regionFilter.find(
       (regionConfig) => regionConfig.region === allRegionsKey
     );
 
@@ -111,10 +104,10 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
     }
 
     // Set the other region filters
-    availableRegions.map((region) => {
+    regions.map((region) => {
       var regionCheckbox = document.getElementById(region) as HTMLInputElement;
 
-      let regionConfig = regionFilterConfig.find(
+      let regionConfig = regionFilter.find(
         (regionConfig) => regionConfig.region === region
       );
 
@@ -127,14 +120,14 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      // console.log("regionFilter:", regionFilterConfig);
+      // console.log("regionFilter:", regionFilter);
     }
   });
 
-  useOnClickOutside(regionFilter, handleClickOutside);
+  useOnClickOutside(regionFilterRef, handleClickOutside);
 
   return (
-    <div className="regionFilter relative" ref={regionFilter}>
+    <div className="regionFilter relative" ref={regionFilterRef}>
       <button
         type="button"
         id="menu-button"
@@ -169,17 +162,19 @@ const RegionFilter = ({ availableRegions }: IRegionFilterProps) => {
         >
           <li className="divide-y divide-mygrey">
             <Checkbox
-              label={allRegionsKey}
+              id={allRegionsKey}
+              label={allRegionsName}
               isCheckedByDefault={true}
               handleSetFilter={handleSetFilter}
             />
             <div className="divide-y divide-gray-100"></div>
           </li>
 
-          {availableRegions.map((region, key) => {
+          {regions.map((region, key) => {
             return (
               <li key={key} value={region}>
                 <Checkbox
+                  id={region}
                   label={region}
                   isCheckedByDefault={false}
                   handleSetFilter={handleSetFilter}
