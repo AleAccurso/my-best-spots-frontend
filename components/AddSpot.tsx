@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Textarea } from "@material-tailwind/react";
-import { allowedCategories } from "src/categories";
-import titleCase from "@/helpers/titleCase";
+import { categories } from "@/src/categories"
 
 const AddSpot = () => {
   const [gpsCoord, setGpsCoord] = useState(false);
@@ -90,10 +89,10 @@ const AddSpot = () => {
             value={data.category}
           >
             <option defaultValue={""}>Select a category</option>
-            {allowedCategories.map((category, key) => {
+            {categories.map((category, key) => {
               return (
-                <option key={key} value={category}>
-                  {titleCase(category.replace("-", " "))}
+                <option key={key} value={category.category_key}>
+                  {category.name}
                 </option>
               );
             })}

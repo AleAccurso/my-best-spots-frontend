@@ -1,6 +1,6 @@
 export interface ICategory {
-    name: string;
-    category_key: string;
+  name: string;
+  category_key: string;
 }
 
 export interface ICategoryCheckboxOption {
@@ -9,5 +9,8 @@ export interface ICategoryCheckboxOption {
 }
 
 export interface ICategoryFilterProps {
-  categories: ICategory[];
+  filterData : {
+    availableCategories: ICategory[];
+    checkboxesConfig: ICategoryCheckboxOption[];
+  };
 }

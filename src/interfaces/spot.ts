@@ -15,3 +15,7 @@ export interface ISpotProps {
 export interface ISpotsListProps {
   spotListData: ISpot[];
 }
+
+export interface ISpotsState {
+  availableSpots: ISpot[];
+}

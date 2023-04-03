@@ -11,27 +11,15 @@ import {
   ICategoryFilterProps,
   ICategoryCheckboxOption,
 } from "@/src/interfaces/category";
+import { allCategoriesKey, allCategoriesName } from "@/src/constants";
 
-// Constants
-const allCategoriesKey = "all-categories";
-const allCategoriesName = "All Categories";
 
-const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
+const CategoryFilter = (props: ICategoryFilterProps) => {
+  const { filterData } = props;
+
   const [isOpen, setIsOpen] = useState(false);
 
   const categoryFilterRef = useRef(null);
-
-  const categoryCheckboxesConfig: ICategoryCheckboxOption[] = [
-    { category_key: allCategoriesKey, value: true },
-  ];
-
-  categories.map((category) => {
-    const categoryCheckboxOption: ICategoryCheckboxOption = {
-      category_key: category.category_key,
-      value: false,
-    };
-    categoryCheckboxesConfig.push(categoryCheckboxOption);
-  });
 
   function handleClickOutside(): void {
     setIsOpen(false);
@@ -44,7 +32,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    categories.map((category) => {
+    filterData.availableCategories.map((category) => {
       var categoryCheckbox = document.getElementById(
         category.category_key
       ) as HTMLInputElement;
@@ -60,7 +48,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
       e.target.id
     ) as HTMLInputElement;
 
-    let categoryCheckboxConfig = categoryCheckboxesConfig.find(
+    let categoryCheckboxConfig = filterData.checkboxesConfig.find(
       (catConfig) => catConfig.category_key === e.target.id
     );
 
@@ -83,7 +71,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
       allCategoriesKey
     ) as HTMLInputElement;
 
-    let allConfig = categoryCheckboxesConfig.find(
+    let allConfig = filterData.checkboxesConfig.find(
       (catConfig) => catConfig.category_key === allCategoriesKey
     );
 
@@ -91,7 +79,10 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
       if (forceReset) {
         resetFilter();
       } else {
-        if (checkedNb == 0 || checkedNb === categories.length) {
+        if (
+          checkedNb == 0 ||
+          checkedNb === filterData.availableCategories.length
+        ) {
           resetFilter();
         }
 
@@ -108,7 +99,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
       allCategoriesKey
     ) as HTMLInputElement;
 
-    let allConfig = categoryCheckboxesConfig.find(
+    let allConfig = filterData.checkboxesConfig.find(
       (catConfig) => catConfig.category_key === allCategoriesKey
     );
 
@@ -118,12 +109,12 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
     }
 
     // Set the other category filters
-    categories.map((category) => {
+    filterData.availableCategories.map((category) => {
       var categoryCheckbox = document.getElementById(
         category.category_key
       ) as HTMLInputElement;
 
-      let categoryConfig = categoryCheckboxesConfig.find(
+      let categoryConfig = filterData.checkboxesConfig.find(
         (catConfig) => catConfig.category_key === category.category_key
       );
 
@@ -136,7 +127,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      // console.log("category filter", categoryCheckboxesConfig);
+      // console.log("category filter", filterData.checkboxesConfig);
     }
   });
 
@@ -186,7 +177,7 @@ const CategoryFilter = ({ categories }: ICategoryFilterProps) => {
             <div className="divide-y divide-gray-100"></div>
           </li>
 
-          {categories.map((category, key) => {
+          {filterData.availableCategories.map((category, key) => {
             return (
               <li key={key} value={category.category_key}>
                 <Checkbox

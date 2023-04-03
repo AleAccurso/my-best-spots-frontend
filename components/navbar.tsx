@@ -15,9 +15,13 @@ import LogoutIcon from "@/icons/logout.svg";
 
 // Components
 import SpotsFilters from "@/UI/SpotsFilters";
+import { useSelector } from "react-redux";
+import { State } from "@/src/store/reducers";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
+
+  const filtersData = useSelector((state: State) => state.filters);
 
   const [isOpen, setOpen] = useState(false);
 
@@ -139,7 +143,9 @@ const NavBar = () => {
           {/* <!-- end login --> */}
         </div>
       </nav>
-      <div className="filtersContainer">{inHomePage && <SpotsFilters />}</div>
+      <div className="filtersContainer">
+        {inHomePage && <SpotsFilters filtersData={filtersData} />}
+      </div>
     </div>
   );
 };

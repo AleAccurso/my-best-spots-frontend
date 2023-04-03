@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 
 export interface ICountryFilterProps {
-  countries: string[];
+  availableCountries: string[];
   setCountryFilter: (e: ChangeEvent<HTMLSelectElement>) => void;
 }

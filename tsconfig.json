@@ -18,6 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@/src/*": ["src/*"],
+      "@/constants" : ["src/constants/*"],
       "@/components/*": ["components/*"],
       "@/helpers/*": ["helpers/*"],
       "@/UI/*": ["components/UI/*"],
@@ -26,6 +27,7 @@
       "@/icons/*": ["src/assets/icons/*"],
       "@/hooks/*": ["src/hooks/*"],
       "@/interfaces/*": ["src/interfaces/*"],
+      "@/store/*": ["src/store/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -1,8 +1,8 @@
+import { defaultCountry } from "@/src/constants";
 import { ICountryFilterProps } from "@/src/interfaces/country";
-import { defaultCountry } from "@/UI/SpotsFilters";
 
 const CountryFilter = ({
-  countries,
+  availableCountries,
   setCountryFilter,
 }: ICountryFilterProps) => {
   return (
@@ -13,7 +13,7 @@ const CountryFilter = ({
         onChange={(e) => setCountryFilter(e)}
       >
         <option defaultValue={defaultCountry}>{defaultCountry}</option>
-        {countries.map((country, key) => {
+        {availableCountries.map((country, key) => {
           return (
             <option key={key} value={country}>
               {country}
