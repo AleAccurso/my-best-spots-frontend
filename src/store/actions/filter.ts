@@ -1,3 +1,4 @@
+import { ICategoryCheckboxOption } from "@/src/interfaces/category";
 import { FilterActionType } from "@/store/actionTypes/filter";
 
 export interface GetFiltersConfigAction {
@@ -16,8 +17,14 @@ export interface GetAvailableRegionsAction {
   type: FilterActionType.GETAVAILABLEREGIONS;
 }
 
-export interface UpdateFilterConfigAction {
-  type: FilterActionType.UPDATEFILTERCONFIG;
+export interface SetCategoryFilterConfigAction {
+  type: FilterActionType.SETCATEGORYFILTERCONFIG;
+  payload: ICategoryCheckboxOption[];
+}
+
+export interface SetSelectedCountryAction {
+  type: FilterActionType.SETSELECTEDCOUNTRY;
+  payload: string;
 }
 
 export type FilterAction =
@@ -25,4 +32,5 @@ export type FilterAction =
   | GetAvailableCategoriesAction
   | GetAvailableCountriesAction
   | GetAvailableRegionsAction
-  | UpdateFilterConfigAction;
+  | SetCategoryFilterConfigAction
+  | SetSelectedCountryAction;

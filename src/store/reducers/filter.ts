@@ -1,5 +1,4 @@
-import { GetAvailableCountriesAction } from './../actions/filter';
-import { IFilterConfig, IFiltersState } from "@/src/interfaces/filter";
+import { IFiltersState } from "@/src/interfaces/filter";
 import { FilterAction } from "../actions/filter";
 import { FilterActionType } from "../actionTypes/filter";
 import { ICategory, ICategoryCheckboxOption } from "@/interfaces/category";
@@ -103,8 +102,13 @@ const filtersReducer = (
     case FilterActionType.GETAVAILABLEREGIONS: {
       return state.regions.availableRegions;
     }
-    case FilterActionType.UPDATEFILTERCONFIG: {
-      return state;
+    case FilterActionType.SETCATEGORYFILTERCONFIG: {
+      state.categories.checkboxesConfig = action.payload
+    }
+    case FilterActionType.SETSELECTEDCOUNTRY: {
+      if (typeof action.payload === 'string'){
+        state.countries.selectedCountry = action.payload;
+      }
     }
     default:
       return state;
