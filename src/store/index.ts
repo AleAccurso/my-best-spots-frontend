@@ -1,2 +1,8 @@
-export * as actionCreators from "@/store/actionCreators"
-export * from "@/store/store"
+import { configureStore } from "@reduxjs/toolkit";
+import reducers from "@/store/reducers";
+
+const store = configureStore({
+  reducer: reducers,
+});
+
+export default store;

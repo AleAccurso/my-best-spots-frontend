@@ -1,5 +1,5 @@
 // Hooks
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 // UI components
@@ -11,33 +11,37 @@ import { allCategoriesKey, allCategoriesName } from "@/src/constants";
 import { useSelector } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
 import { useDispatch } from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "@/src/store";
+
+import { filtersName } from "@/src/enums/filters";
+import { updateCheckboxStatus } from "@/src/store/reducers/filter";
 
 const CategoryFilter = () => {
+  const dispatch = useDispatch();
 
-  const categories = useSelector(
+  let categories = useSelector(
     (state: CombinedState) => state.filters.categories.availableCategories
   );
 
-  const checkboxesConfig = useSelector(
+  let checkboxesConfig = useSelector(
     (state: CombinedState) => state.filters.categories.checkboxesConfig
   );
 
-  const dispatch = useDispatch();
-  const { setCategoryFilterConfig } = bindActionCreators(actionCreators, dispatch)
-
   const [isOpen, setIsOpen] = useState(false);
+  const [isCategorySelectionFinished, setIsCategorySelectionFinished] =
+    useState(false);
 
   const categoryFilterRef = useRef(null);
 
   function handleClickOutside(): void {
-    setIsOpen(false);
-    // TODO: Apply filter to list of spots
+    if (isOpen && !isCategorySelectionFinished) {
+      setIsOpen(false);
+      setIsCategorySelectionFinished(true);
+    }
   }
 
   const handleClickInside = () => {
     setIsOpen(true);
+    setIsCategorySelectionFinished(false);
   };
 
   const countCheckedCheckboxes = () => {
@@ -64,7 +68,13 @@ const CategoryFilter = () => {
 
     if (categoryCheckbox !== null && categoryCheckboxConfig) {
       categoryCheckbox.checked = e.target.checked;
-      categoryCheckboxConfig.value = e.target.checked;
+      dispatch(
+        updateCheckboxStatus({
+          filter: filtersName.CATEGORY,
+          key: e.target.id,
+          value: e.target.checked,
+        })
+      );
     }
 
     if (e.target.id == allCategoriesKey) {
@@ -95,7 +105,13 @@ const CategoryFilter = () => {
 
         if (checkedNb > 0) {
           allCheckbox.checked = false;
-          allConfig.value = false;
+          dispatch(
+            updateCheckboxStatus({
+              filter: filtersName.CATEGORY,
+              key: allCategoriesKey,
+              value: false,
+            })
+          );
         }
       }
     }
@@ -112,7 +128,13 @@ const CategoryFilter = () => {
 
     if (allCheckbox && allConfig) {
       allCheckbox.checked = true;
-      allConfig.value = true;
+      dispatch(
+        updateCheckboxStatus({
+          filter: filtersName.CATEGORY,
+          key: allCategoriesKey,
+          value: true,
+        })
+      );
     }
 
     // Set the other category filters
@@ -127,16 +149,18 @@ const CategoryFilter = () => {
 
       if (categoryCheckbox !== null && categoryConfig) {
         categoryCheckbox.checked = false;
-        categoryConfig.value = false;
+        dispatch(
+          updateCheckboxStatus({
+            filter: filtersName.CATEGORY,
+            key: allCategoriesKey,
+            value: false,
+          })
+        );
       }
     });
   };
 
-  useEffect(() => {
-    if (!isOpen) {
-      setCategoryFilterConfig(checkboxesConfig);
-    }
-  });
+  
 
   useOnClickOutside(categoryFilterRef, handleClickOutside);
 

@@ -1,50 +1,52 @@
-import { ISpotsState } from "@/interfaces/spot";
-import { SpotAction } from "@/store/actions/spot";
-import { SpotActionType } from "@/store/actionTypes/spot";
-import { start } from "repl";
+import { ISpot, ISpotsState } from "@/interfaces/spot";
+import { createSlice } from "@reduxjs/toolkit";
+
+const spots: ISpot[] = [
+  {
+    title: "Grand Place",
+    address: "Grote Markt",
+    postal_code: "1000",
+    city: "Brussel",
+    country_code: "BE",
+    category: "tourism",
+    isShared: false,
+  },
+  {
+    title: "Docks Bruxsel",
+    address: "Bd Lambermont 1",
+    postal_code: "1000",
+    city: "Brussel",
+    country_code: "BE",
+    category: "shopping",
+    isShared: false,
+  },
+  {
+    title: "Delirium Cafe",
+    address: "Imp. de la Fidélité 4",
+    postal_code: "1000",
+    city: "Brussel",
+    country_code: "BE",
+    category: "cafe-bar",
+    isShared: false,
+  },
+];
 
 const initialState: ISpotsState = {
-  availableSpots: [
-    {
-      title: "Grand Place",
-      address: "Grote Markt",
-      postal_code: "1000",
-      city: "Brussel",
-      country_code: "BE",
-      category: "tourism",
-      isShared: false,
-    },
-    {
-      title: "Docks Bruxsel",
-      address: "Bd Lambermont 1",
-      postal_code: "1000",
-      city: "Brussel",
-      country_code: "BE",
-      category: "shopping",
-      isShared: false,
-    },
-    {
-      title: "Delirium Cafe",
-      address: "Imp. de la Fidélité 4",
-      postal_code: "1000",
-      city: "Brussel",
-      country_code: "BE",
-      category: "cafe-bar",
-      isShared: false,
-    },
-  ],
+  availableSpots: [],
 };
 
-const spotReducer = (state: ISpotsState = initialState, action: SpotAction) => {
-  switch (action.type) {
-    case SpotActionType.GETSPOTS: {
-      return state.availableSpots;
-    }
-    case SpotActionType.ADDSPOT: {
-    }
-    default:
-      return state;
-  }
-};
+const spotSlice = createSlice({
+  name: "spotReducer",
+  initialState,
+  reducers: {
+    fetchAvailableSpots: (state) => {
+      state.availableSpots = spots;
+    },
+    getSpots: (state) => {
+      state.availableSpots;
+    },
+  },
+});
 
-export default spotReducer;
+export const { fetchAvailableSpots, getSpots } = spotSlice.actions;
+export default spotSlice.reducer;

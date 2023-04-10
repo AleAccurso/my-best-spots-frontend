@@ -1,23 +1,44 @@
 import Image from "next/image";
 import SpotsList from "@/components/SpotsList";
-import { ISpot, ISpotsState } from "@/src/interfaces/spot";
 
-import { useDispatch, useSelector } from "react-redux"
-import { bindActionCreators } from "redux";
-import { actionCreators } from "@/src/store";
-import { IFilterConfig } from "@/src/interfaces/filter";
+import { useDispatch, useSelector } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import {
+  fetchAvailableCategories,
+  fetchAvailableCountries,
+  fetchAvailableRegions,
+  resetFilterConfig,
+} from "@/src/store/reducers/filter";
+import { useEffect } from "react";
+import { filtersName } from "@/src/enums/filters";
+import { setForceReset } from "@/src/store/reducers/common";
 
 // import MapboxMap from "./MapboxMap";
 
 const HomePage = () => {
+  const spots = useSelector(
+    (state: CombinedState) => state.spots.availableSpots
+  );
 
-  // const dispatch = useDispatch();
-  // const { getSpots } = bindActionCreators(actionCreators, dispatch);
+  const forceReset = useSelector(
+    (state: CombinedState) => state.common.forceReset
+  );
 
-  // const triggerGetSpots = getSpots();
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const spots = useSelector((state: CombinedState) => state.spots.availableSpots);
+  useEffect(() => {
+    if (forceReset) {
+      console.log("reseting filters...")
+      dispatch(fetchAvailableCategories());
+      dispatch(resetFilterConfig({ filter: filtersName.CATEGORY }));
+      dispatch(fetchAvailableCountries());
+      dispatch(resetFilterConfig({ filter: filtersName.COUNTRY }));
+      dispatch(fetchAvailableRegions());
+      dispatch(resetFilterConfig({ filter: filtersName.REGION }));
+      dispatch(setForceReset(false));
+    }
+  });
 
   return (
     <div className="homepage flex h-screen p-0 m-0">

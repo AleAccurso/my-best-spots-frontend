@@ -10,14 +10,17 @@ export interface IFilterConfig {
 
 export interface IFiltersState {
   categories: {
+    loading: boolean;
     availableCategories: ICategory[];
     checkboxesConfig: ICategoryCheckboxOption[];
   };
   countries: {
+    loading: boolean;
     availableCountries: string[];
     selectedCountry: string;
   };
   regions: {
+    loading: boolean;
     availableRegions: IRegion[];
     checkboxesConfig: IRegionCheckboxOption[];
   };

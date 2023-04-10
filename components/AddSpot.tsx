@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Textarea } from "@material-tailwind/react";
-import { categories } from "@/src/categories"
+import { useSelector } from "react-redux";
+import { CombinedState } from "@/src/interfaces/store";
 
 const AddSpot = () => {
   const [gpsCoord, setGpsCoord] = useState(false);
@@ -18,6 +19,10 @@ const AddSpot = () => {
     logged_users: false,
     admin: false,
   });
+
+  let categories = useSelector(
+    (state: CombinedState) => state.filters.categories.availableCategories
+  );
 
   const handleGpsCoord = () => {
     setGpsCoord(!gpsCoord);
