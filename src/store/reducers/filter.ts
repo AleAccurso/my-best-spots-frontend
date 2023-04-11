@@ -61,7 +61,7 @@ const initialState: IFiltersState = {
   },
   countries: {
     loading: false,
-    availableCountries: countries,
+    availableCountries: [],
     selectedCountry: "",
   },
   regions: {
@@ -121,7 +121,7 @@ const filtersSlice = createSlice({
               value: true,
             },
           ];
-          
+
           categories.map((category) => {
             const categoryCheckboxOption: ICategoryCheckboxOption = {
               category_key: category.category_key,
@@ -150,7 +150,7 @@ const filtersSlice = createSlice({
             };
             regionCheckboxesConfig.push(regionCheckboxOption);
           });
-          
+
           state.regions.checkboxesConfig = regionCheckboxesConfig;
         }
         case filtersName.COUNTRY: {
@@ -186,12 +186,9 @@ const filtersSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchAvailableCategories.pending,
-      (state: IFiltersState) => {
-        state.categories.loading = true;
-      }
-    );
+    builder.addCase(fetchAvailableCategories.pending, (state) => {
+      state.categories.loading = true;
+    });
     builder.addCase(
       fetchAvailableCategories.fulfilled,
       (state, { payload }) => {
@@ -201,31 +198,25 @@ const filtersSlice = createSlice({
         state.categories.loading = false;
       }
     );
-    builder.addCase(fetchAvailableCountries.pending, (state: IFiltersState) => {
+    builder.addCase(fetchAvailableCountries.pending, (state) => {
       state.countries.loading = true;
     });
-    builder.addCase(
-      fetchAvailableCountries.fulfilled,
-      (state: IFiltersState, { payload }) => {
-        if (payload) {
-          state.countries.availableCountries = payload;
-        }
-        state.countries.loading = false;
+    builder.addCase(fetchAvailableCountries.fulfilled, (state, { payload }) => {
+      if (payload) {
+        state.countries.availableCountries = payload;
       }
-    );
-    builder.addCase(fetchAvailableRegions.pending, (state: IFiltersState) => {
+      state.countries.loading = false;
+    });
+    builder.addCase(fetchAvailableRegions.pending, (state) => {
       state.regions.loading = true;
     });
-    builder.addCase(
-      fetchAvailableRegions.fulfilled,
-      (state: IFiltersState, { payload }) => {
-        if (payload) {
-          state.regions.availableRegions = payload;
-        }
-        state.regions.loading = false;
+    builder.addCase(fetchAvailableRegions.fulfilled, (state, { payload }) => {
+      if (payload) {
+        state.regions.availableRegions = payload;
       }
-    );
-  },      
+      state.regions.loading = false;
+    });
+  },
 });
 
 export const { resetFilterConfig, setSelectedCountry, updateCheckboxStatus } =

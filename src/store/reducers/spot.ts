@@ -32,7 +32,7 @@ const spots: ISpot[] = [
 ];
 
 const initialState: ISpotsState = {
-  availableSpots: spots,
+  availableSpots: [],
   loading: true,
 };
 
@@ -59,7 +59,6 @@ const spotSlice = createSlice({
     builder.addCase(fetchAvailableSpots.fulfilled, (state, action) => {
       if (action.payload) {
         state.availableSpots = action.payload;
-        console.log("🚀 ~ builder.addCase ~ payload:", action.payload);
       }
       state.loading = false;
     });
