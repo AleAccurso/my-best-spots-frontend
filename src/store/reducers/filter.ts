@@ -6,7 +6,9 @@ import { filtersName } from "@/src/enums/filters";
 import axios from "axios";
 import {
   allCategoriesKey,
+  allCategoriesName,
   allRegionsKey,
+  allRegionsName,
   defaultCountry,
 } from "@/src/constants";
 
@@ -59,7 +61,7 @@ const initialState: IFiltersState = {
   },
   countries: {
     loading: false,
-    availableCountries: [],
+    availableCountries: countries,
     selectedCountry: "",
   },
   regions: {
@@ -71,7 +73,7 @@ const initialState: IFiltersState = {
 
 const fetchAvailableCategories = createAsyncThunk(
   "fetchAvailableCategories",
-  async (data, { rejectWithValue }) => {
+  (data, { rejectWithValue }) => {
     try {
       // const { data } = await axios.get<ICategory[]>("");
       return categories;
@@ -83,9 +85,9 @@ const fetchAvailableCategories = createAsyncThunk(
 
 const fetchAvailableCountries = createAsyncThunk(
   "fetchAvailableCountries",
-  async (data, { rejectWithValue }) => {
+  (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<ICategory[]>("");
+      // const { data } = await axios.get<ICountry[]>("");
       return countries;
     } catch (error: unknown) {
       rejectWithValue(error);
@@ -97,7 +99,7 @@ const fetchAvailableRegions = createAsyncThunk(
   "fetchAvailableRegions",
   async (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<ICategory[]>("");
+      // const { data } = await axios.get<IRegion[]>("");
       return regions;
     } catch (error: unknown) {
       rejectWithValue(error);
@@ -113,12 +115,17 @@ const filtersSlice = createSlice({
       switch (action.payload.filter) {
         case filtersName.CATEGORY: {
           const categoryCheckboxesConfig: ICategoryCheckboxOption[] = [
-            { category_key: allCategoriesKey, value: true },
+            {
+              category_key: allCategoriesKey,
+              category_name: allCategoriesName,
+              value: true,
+            },
           ];
-
+          
           categories.map((category) => {
             const categoryCheckboxOption: ICategoryCheckboxOption = {
               category_key: category.category_key,
+              category_name: category.name,
               value: false,
             };
             categoryCheckboxesConfig.push(categoryCheckboxOption);
@@ -128,16 +135,22 @@ const filtersSlice = createSlice({
         }
         case filtersName.REGION: {
           const regionCheckboxesConfig: IRegionCheckboxOption[] = [
-            { region_key: allRegionsKey, value: true },
+            {
+              region_key: allRegionsKey,
+              region_name: allRegionsName,
+              value: true,
+            },
           ];
 
           regions.map((region) => {
             const regionCheckboxOption: IRegionCheckboxOption = {
               region_key: region.region_key,
+              region_name: region.name,
               value: false,
             };
             regionCheckboxesConfig.push(regionCheckboxOption);
           });
+          
           state.regions.checkboxesConfig = regionCheckboxesConfig;
         }
         case filtersName.COUNTRY: {
@@ -173,37 +186,53 @@ const filtersSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAvailableCategories.pending, (state) => {
-      state.categories.loading = true;
-    });
-    builder.addCase(fetchAvailableCategories.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.categories.availableCategories = action.payload;
+    builder.addCase(
+      fetchAvailableCategories.pending,
+      (state: IFiltersState) => {
+        state.categories.loading = true;
       }
-      state.categories.loading = false;
-    });
-    builder.addCase(fetchAvailableCountries.pending, (state) => {
+    );
+    builder.addCase(
+      fetchAvailableCategories.fulfilled,
+      (state, { payload }) => {
+        if (payload) {
+          state.categories.availableCategories = payload;
+        }
+        state.categories.loading = false;
+      }
+    );
+    builder.addCase(fetchAvailableCountries.pending, (state: IFiltersState) => {
       state.countries.loading = true;
     });
-    builder.addCase(fetchAvailableCountries.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.countries.availableCountries = action.payload;
+    builder.addCase(
+      fetchAvailableCountries.fulfilled,
+      (state: IFiltersState, { payload }) => {
+        if (payload) {
+          state.countries.availableCountries = payload;
+        }
+        state.countries.loading = false;
       }
-      state.countries.loading = false;
-    });
-    builder.addCase(fetchAvailableRegions.pending, (state) => {
+    );
+    builder.addCase(fetchAvailableRegions.pending, (state: IFiltersState) => {
       state.regions.loading = true;
     });
-    builder.addCase(fetchAvailableRegions.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.regions.availableRegions = action.payload;
+    builder.addCase(
+      fetchAvailableRegions.fulfilled,
+      (state: IFiltersState, { payload }) => {
+        if (payload) {
+          state.regions.availableRegions = payload;
+        }
+        state.regions.loading = false;
       }
-      state.regions.loading = false;
-    });
-  },
+    );
+  },      
 });
 
 export const { resetFilterConfig, setSelectedCountry, updateCheckboxStatus } =
   filtersSlice.actions;
-export { fetchAvailableCategories, fetchAvailableCountries, fetchAvailableRegions };
+export {
+  fetchAvailableCategories,
+  fetchAvailableCountries,
+  fetchAvailableRegions,
+};
 export default filtersSlice.reducer;

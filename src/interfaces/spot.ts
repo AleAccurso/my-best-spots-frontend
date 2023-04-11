@@ -18,4 +18,5 @@ export interface ISpotsListProps {
 
 export interface ISpotsState {
   availableSpots: ISpot[];
+  loading: boolean;
 }

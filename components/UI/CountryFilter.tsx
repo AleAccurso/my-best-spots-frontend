@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const CountryFilter = () => {
-  const availableCountries = useSelector(
-    (state: CombinedState) => state.filters.countries.availableCountries
+  const { availableCountries, loading} = useSelector(
+    (state: CombinedState) => state.filters.countries
   );
 
   const selectedCountry = useSelector(
@@ -24,7 +24,7 @@ const CountryFilter = () => {
         value={selectedCountry}
       >
         <option defaultValue={defaultCountry}>{defaultCountry}</option>
-        {availableCountries.map((country, key) => {
+        {!loading && availableCountries.map((country, key) => {
           return (
             <option key={key} value={country}>
               {country}

@@ -5,6 +5,7 @@ export interface ICategory {
 
 export interface ICategoryCheckboxOption {
   category_key: string;
+  category_name: string;
   value: boolean;
 }
 

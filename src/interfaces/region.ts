@@ -4,6 +4,7 @@ export interface IRegion {
 }
 export interface IRegionCheckboxOption {
   region_key: string;
+  region_name: string;
   value: boolean;
 }
 

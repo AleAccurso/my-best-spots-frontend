@@ -18,12 +18,8 @@ import { filtersName } from "@/src/enums/filters";
 const RegionFilter = () => {
   const dispatch = useDispatch();
 
-  let regions = useSelector(
-    (state: CombinedState) => state.filters.regions.availableRegions
-  );
-
-  let checkboxesConfig = useSelector(
-    (state: CombinedState) => state.filters.regions.checkboxesConfig
+  const { availableRegions, checkboxesConfig, loading } = useSelector(
+    (state: CombinedState) => state.filters.regions
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +42,7 @@ const RegionFilter = () => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    regions.map((region) => {
+    checkboxesConfig.map((region) => {
       var regionCheckbox = document.getElementById(
         region.region_key
       ) as HTMLInputElement;
@@ -58,7 +54,7 @@ const RegionFilter = () => {
   };
 
   const handleSetFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    var RegionCheckbox = document.getElementById(
+    var regionCheckbox = document.getElementById(
       e.target.id
     ) as HTMLInputElement;
 
@@ -66,8 +62,8 @@ const RegionFilter = () => {
       (regConfig) => regConfig.region_key === e.target.id
     );
 
-    if (RegionCheckbox !== null && RegionCheckboxConfig) {
-      RegionCheckbox.checked = e.target.checked;
+    if (regionCheckbox !== null && RegionCheckboxConfig) {
+      regionCheckbox.checked = e.target.checked;
       dispatch(
         updateCheckboxStatus({
           filter: filtersName.REGION,
@@ -99,7 +95,7 @@ const RegionFilter = () => {
       if (forceReset) {
         resetFilter();
       } else {
-        if (checkedNb == 0 || checkedNb === regions.length) {
+        if (checkedNb == 0 || checkedNb === availableRegions.length) {
           resetFilter();
         }
 
@@ -138,17 +134,13 @@ const RegionFilter = () => {
     }
 
     // Set the other Region filters
-    regions.map((Region) => {
-      var RegionCheckbox = document.getElementById(
-        Region.region_key
+    checkboxesConfig.map((region) => {
+      var regionCheckbox = document.getElementById(
+        region.region_key
       ) as HTMLInputElement;
 
-      let RegionConfig = checkboxesConfig.find(
-        (regConfig) => regConfig.region_key === Region.region_key
-      );
-
-      if (RegionCheckbox !== null && RegionConfig) {
-        RegionCheckbox.checked = false;
+      if (regionCheckbox !== null) {
+        regionCheckbox.checked = false;
         dispatch(
           updateCheckboxStatus({
             filter: filtersName.REGION,
@@ -196,28 +188,19 @@ const RegionFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li className="divide-y divide-mygrey">
-            <Checkbox
-              id={allRegionsKey}
-              label={allRegionsName}
-              isCheckedByDefault={true}
-              handleSetFilter={handleSetFilter}
-            />
-            <div className="divide-y divide-gray-100"></div>
-          </li>
-
-          {regions.map((Region, key) => {
-            return (
-              <li key={key} value={Region.region_key}>
-                <Checkbox
-                  id={Region.region_key}
-                  label={Region.name}
-                  isCheckedByDefault={false}
-                  handleSetFilter={handleSetFilter}
-                />
-              </li>
-            );
-          })}
+          {!loading &&
+            checkboxesConfig.map((region, key) => {
+              return (
+                <li key={key} value={region.region_key}>
+                  <Checkbox
+                    id={region.region_key}
+                    label={region.region_name}
+                    isChecked={region.value}
+                    handleSetFilter={handleSetFilter}
+                  />
+                </li>
+              );
+            })}
         </ul>
       </div>
     </div>

@@ -3,14 +3,14 @@ import { ChangeEvent } from "react";
 export interface ICheckboxProps {
   id: string;
   label: string;
-  isCheckedByDefault: boolean;
+  isChecked: boolean;
   handleSetFilter: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Checkbox = ({
   id,
   label,
-  isCheckedByDefault,
+  isChecked,
   handleSetFilter,
 }: ICheckboxProps) => {
   return (
@@ -20,7 +20,7 @@ const Checkbox = ({
         type="checkbox"
         value={label}
         className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
-        defaultChecked={isCheckedByDefault}
+        checked={isChecked}
         onChange={(e) => handleSetFilter(e)}
       />
       <label

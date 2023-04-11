@@ -7,7 +7,7 @@ import ChevronDownIcon from "@/icons/chevron-down.svg";
 import Checkbox from "@/UI/Checkbox";
 
 // Interfaces
-import { allCategoriesKey, allCategoriesName } from "@/src/constants";
+import { allCategoriesKey } from "@/src/constants";
 import { useSelector } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
 import { useDispatch } from "react-redux";
@@ -18,12 +18,8 @@ import { updateCheckboxStatus } from "@/src/store/reducers/filter";
 const CategoryFilter = () => {
   const dispatch = useDispatch();
 
-  let categories = useSelector(
-    (state: CombinedState) => state.filters.categories.availableCategories
-  );
-
-  let checkboxesConfig = useSelector(
-    (state: CombinedState) => state.filters.categories.checkboxesConfig
+  const { availableCategories, checkboxesConfig, loading} = useSelector(
+    (state: CombinedState) => state.filters.categories
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +42,7 @@ const CategoryFilter = () => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    categories.map((category) => {
+    checkboxesConfig.map((category) => {
       var categoryCheckbox = document.getElementById(
         category.category_key
       ) as HTMLInputElement;
@@ -99,7 +95,10 @@ const CategoryFilter = () => {
       if (forceReset) {
         resetFilter();
       } else {
-        if (checkedNb == 0 || checkedNb === categories.length) {
+        if (
+          checkedNb == 0 ||
+          checkedNb === availableCategories.length
+        ) {
           resetFilter();
         }
 
@@ -138,16 +137,12 @@ const CategoryFilter = () => {
     }
 
     // Set the other category filters
-    categories.map((category) => {
+    checkboxesConfig.map((checkboxOption) => {
       var categoryCheckbox = document.getElementById(
-        category.category_key
+        checkboxOption.category_key
       ) as HTMLInputElement;
 
-      let categoryConfig = checkboxesConfig.find(
-        (catConfig) => catConfig.category_key === category.category_key
-      );
-
-      if (categoryCheckbox !== null && categoryConfig) {
+      if (categoryCheckbox !== null) {
         categoryCheckbox.checked = false;
         dispatch(
           updateCheckboxStatus({
@@ -159,8 +154,6 @@ const CategoryFilter = () => {
       }
     });
   };
-
-  
 
   useOnClickOutside(categoryFilterRef, handleClickOutside);
 
@@ -198,23 +191,13 @@ const CategoryFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          <li className="divide-y divide-mygrey">
-            <Checkbox
-              id={allCategoriesKey}
-              label={allCategoriesName}
-              isCheckedByDefault={true}
-              handleSetFilter={handleSetFilter}
-            />
-            <div className="divide-y divide-gray-100"></div>
-          </li>
-
-          {categories.map((category, key) => {
+          {!loading && checkboxesConfig.map((category, key) => {
             return (
               <li key={key} value={category.category_key}>
                 <Checkbox
                   id={category.category_key}
-                  label={category.name}
-                  isCheckedByDefault={false}
+                  label={category.category_name}
+                  isChecked={category.value}
                   handleSetFilter={handleSetFilter}
                 />
               </li>

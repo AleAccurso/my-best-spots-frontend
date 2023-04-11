@@ -13,6 +13,7 @@ import {
 import { useEffect } from "react";
 import { filtersName } from "@/src/enums/filters";
 import { setForceReset } from "@/src/store/reducers/common";
+import { fetchAvailableSpots } from "@/src/store/reducers/spot";
 
 // import MapboxMap from "./MapboxMap";
 
@@ -29,12 +30,12 @@ const HomePage = () => {
 
   useEffect(() => {
     if (forceReset) {
-      console.log("reseting filters...")
-      dispatch(fetchAvailableCategories());
+      // dispatch(fetchAvailableSpots());
+      // dispatch(fetchAvailableCategories());
       dispatch(resetFilterConfig({ filter: filtersName.CATEGORY }));
-      dispatch(fetchAvailableCountries());
+      // dispatch(fetchAvailableCountries());
       dispatch(resetFilterConfig({ filter: filtersName.COUNTRY }));
-      dispatch(fetchAvailableRegions());
+      // dispatch(fetchAvailableRegions());
       dispatch(resetFilterConfig({ filter: filtersName.REGION }));
       dispatch(setForceReset(false));
     }
