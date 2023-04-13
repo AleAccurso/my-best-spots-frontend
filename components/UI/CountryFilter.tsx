@@ -5,14 +5,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const CountryFilter = () => {
-  const { availableCountries, loading} = useSelector(
+  const { availableCountries, loading, selectedCountry } = useSelector(
     (state: CombinedState) => state.filters.countries
   );
-
-  const selectedCountry = useSelector(
-    (state: CombinedState) => state.filters.countries.selectedCountry
-  );
-
+  
   const dispatch = useDispatch();
 
   return (

@@ -1,5 +1,9 @@
 import { IFiltersState } from "@/src/interfaces/filter";
-import { ICategory, ICategoryCheckboxOption } from "@/interfaces/category";
+import {
+  Category,
+  CategoryList,
+  ICategoryCheckboxOption,
+} from "@/interfaces/category";
 import { IRegion, IRegionCheckboxOption } from "@/src/interfaces/region";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { filtersName } from "@/src/enums/filters";
@@ -12,21 +16,53 @@ import {
   defaultCountry,
 } from "@/src/constants";
 
-const categories: ICategory[] = [
-  { category_key: "cafe-bar", name: "Cafe - Bar" },
-  { category_key: "gas-station", name: "Gas Station" },
-  { category_key: "hosting", name: "Hosting" },
-  { category_key: "leisure", name: "Leisure" },
-  { category_key: "medical", name: "Medical" },
-  { category_key: "private-beach", name: "Private Beach" },
-  { category_key: "producer", name: "Producer" },
-  { category_key: "public-beach", name: "Public Beach" },
-  { category_key: "religious-site", name: "Religious Site" },
-  { category_key: "restaurant", name: "Restaurant" },
-  { category_key: "shop", name: "Shop" },
-  { category_key: "thermal", name: "Thermal" },
-  { category_key: "tourism", name: "Tourism" },
-];
+const categories = new CategoryList();
+
+categories.addCategory(
+  new Category({ category_key: "cafe-bar", category_name: "Cafe - Bar" })
+);
+categories.addCategory(
+  new Category({ category_key: "gas-station", category_name: "Gas Station" })
+);
+categories.addCategory(
+  new Category({ category_key: "hosting", category_name: "Hosting" })
+);
+categories.addCategory(
+  new Category({ category_key: "leisure", category_name: "Leisure" })
+);
+categories.addCategory(
+  new Category({ category_key: "medical", category_name: "Medical" })
+);
+categories.addCategory(
+  new Category({
+    category_key: "private-beach",
+    category_name: "Private Beach",
+  })
+);
+categories.addCategory(
+  new Category({ category_key: "producer", category_name: "Producer" })
+);
+categories.addCategory(
+  new Category({ category_key: "public-beach", category_name: "Public Beach" })
+);
+categories.addCategory(
+  new Category({
+    category_key: "religious-site",
+    category_name: "Religious Site",
+  })
+);
+categories.addCategory(
+  new Category({ category_key: "restaurant", category_name: "Restaurant" })
+);
+categories.addCategory(
+  new Category({ category_key: "shop", category_name: "Shop" })
+);
+categories.addCategory(
+  new Category({ category_key: "thermal", category_name: "Thermal" })
+);
+categories.addCategory(
+  new Category({ category_key: "tourism", category_name: "Tourism" })
+);
 
 const countries = ["Belgium", "France", "Switzerland", "Italy"];
 
@@ -56,7 +92,7 @@ const regions: IRegion[] = [
 const initialState: IFiltersState = {
   categories: {
     loading: false,
-    availableCategories: [],
+    availableCategories: new CategoryList(),
     checkboxesConfig: [],
   },
   countries: {
@@ -73,24 +109,26 @@ const initialState: IFiltersState = {
 
 const fetchAvailableCategories = createAsyncThunk(
   "fetchAvailableCategories",
-  (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<ICategory[]>("");
+      const { data } = await axios.get<Category[]>("");
       return categories;
     } catch (error: unknown) {
       rejectWithValue(error);
+      return categories;
     }
   }
 );
 
 const fetchAvailableCountries = createAsyncThunk(
   "fetchAvailableCountries",
-  (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<ICountry[]>("");
+      const { data } = await axios.get<string[]>("");
       return countries;
     } catch (error: unknown) {
       rejectWithValue(error);
+      return countries;
     }
   }
 );
@@ -99,10 +137,11 @@ const fetchAvailableRegions = createAsyncThunk(
   "fetchAvailableRegions",
   async (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<IRegion[]>("");
+      const { data } = await axios.get<IRegion[]>("");
       return regions;
     } catch (error: unknown) {
       rejectWithValue(error);
+      return regions;
     }
   }
 );
@@ -116,16 +155,19 @@ const filtersSlice = createSlice({
         case filtersName.CATEGORY: {
           const categoryCheckboxesConfig: ICategoryCheckboxOption[] = [
             {
-              category_key: allCategoriesKey,
-              category_name: allCategoriesName,
+              category: new Category({
+                category_name: allCategoriesName,
+                category_key: allCategoriesKey,
+              }),
               value: true,
             },
           ];
+          
+          console.log("🚀 ~ resetFilter ~ availableCategories:", state.categories.availableCategories);
 
-          categories.map((category) => {
+          state.categories.availableCategories.getList().map((availableCategory) => {
             const categoryCheckboxOption: ICategoryCheckboxOption = {
-              category_key: category.category_key,
-              category_name: category.name,
+              category: availableCategory,
               value: false,
             };
             categoryCheckboxesConfig.push(categoryCheckboxOption);
@@ -142,7 +184,7 @@ const filtersSlice = createSlice({
             },
           ];
 
-          regions.map((region) => {
+          state.regions.availableRegions.map((region) => {
             const regionCheckboxOption: IRegionCheckboxOption = {
               region_key: region.region_key,
               region_name: region.name,
@@ -168,7 +210,8 @@ const filtersSlice = createSlice({
       switch (action.payload.filter) {
         case filtersName.CATEGORY: {
           let catConfig = state.categories.checkboxesConfig.find(
-            (catConfig) => catConfig.category_key === action.payload.key
+            (catConfig) =>
+              catConfig.category.getCategoryKey() === action.payload.key
           );
           if (catConfig) {
             catConfig.value = action.payload.value;
@@ -189,30 +232,28 @@ const filtersSlice = createSlice({
     builder.addCase(fetchAvailableCategories.pending, (state) => {
       state.categories.loading = true;
     });
-    builder.addCase(
-      fetchAvailableCategories.fulfilled,
-      (state, { payload }) => {
-        if (payload) {
-          state.categories.availableCategories = payload;
-        }
-        state.categories.loading = false;
+    builder.addCase(fetchAvailableCategories.fulfilled, (state, action) => {
+      if (action.payload && action.payload instanceof CategoryList) {
+        state.categories.availableCategories = action.payload;
+        console.log("🚀 ~ extra-reducer ~ availableCategories:", state.categories.availableCategories);
       }
-    );
+      state.categories.loading = false;
+    });
     builder.addCase(fetchAvailableCountries.pending, (state) => {
       state.countries.loading = true;
     });
-    builder.addCase(fetchAvailableCountries.fulfilled, (state, { payload }) => {
-      if (payload) {
-        state.countries.availableCountries = payload;
+    builder.addCase(fetchAvailableCountries.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.countries.availableCountries = action.payload;
       }
       state.countries.loading = false;
     });
     builder.addCase(fetchAvailableRegions.pending, (state) => {
       state.regions.loading = true;
     });
-    builder.addCase(fetchAvailableRegions.fulfilled, (state, { payload }) => {
-      if (payload) {
-        state.regions.availableRegions = payload;
+    builder.addCase(fetchAvailableRegions.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.regions.availableRegions = action.payload;
       }
       state.regions.loading = false;
     });

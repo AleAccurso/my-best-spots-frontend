@@ -1,13 +1,13 @@
-import { ISpot } from "@/src/interfaces/spot";
+import { Spot } from "@/src/interfaces/spot";
 
-export default function addressToString(spotData: ISpot) {
+export default function addressToString(spotData: Spot) {
   return (
-    spotData.address +
+    spotData.getAddress() +
     ", " +
-    spotData.postal_code +
+    spotData.getPostalCode() +
     " " +
-    spotData.city +
+    spotData.getCity() +
     " - " +
-    spotData.country_code
+    spotData.getCountryCode()
   );
 }

@@ -11,18 +11,18 @@ const Spot = (props: ISpotProps) => {
 
   const toggleSharedSpot = () => {
     setIsShared(!isShared);
-    spotData.isShared = !spotData.isShared;
+    spotData.setIsShared(!spotData.getIsShared());
   };
 
   return (
     <div className="spot flex relative w-500 my-2 items-center">
-      <div className="categoryIcon">{getCategoryIcon(spotData.category)}</div>
+      <div className="categoryIcon">{getCategoryIcon(spotData.getCategory())}</div>
       <div className="spotInfo flex flex-col ml-3">
-        <span className="text-lg text-extrabold">{spotData.title}</span>
+        <span className="text-lg text-extrabold">{spotData.getTitle()}</span>
         <span className="text-sm">{addressToString(spotData)}</span>
       </div>
       <div className="absolute right-2 top-3">
-        {spotData.isShared ? (
+        {spotData.getIsShared() ? (
           <button>
             <ShareAdded onClick={toggleSharedSpot} />
           </button>

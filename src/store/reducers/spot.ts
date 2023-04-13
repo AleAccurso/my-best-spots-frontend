@@ -1,8 +1,11 @@
-import { ISpot, ISpotsState } from "@/interfaces/spot";
+import { ISpot, ISpotsState, Spot, SpotList } from "@/interfaces/spot";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const spots: ISpot[] = [
-  {
+const spots = new SpotList();
+
+spots.addSpot(
+  new Spot({
     title: "Grand Place",
     address: "Grote Markt",
     postal_code: "1000",
@@ -10,8 +13,10 @@ const spots: ISpot[] = [
     country_code: "BE",
     category: "tourism",
     isShared: false,
-  },
-  {
+  })
+);
+spots.addSpot(
+  new Spot({
     title: "Docks Bruxsel",
     address: "Bd Lambermont 1",
     postal_code: "1000",
@@ -19,8 +24,10 @@ const spots: ISpot[] = [
     country_code: "BE",
     category: "shopping",
     isShared: false,
-  },
-  {
+  })
+);
+spots.addSpot(
+  new Spot({
     title: "Delirium Cafe",
     address: "Imp. de la Fidélité 4",
     postal_code: "1000",
@@ -28,22 +35,23 @@ const spots: ISpot[] = [
     country_code: "BE",
     category: "cafe-bar",
     isShared: false,
-  },
-];
+  })
+);
 
 const initialState: ISpotsState = {
-  availableSpots: [],
+  availableSpots: new SpotList(),
   loading: true,
 };
 
 const fetchAvailableSpots = createAsyncThunk(
   "fetchAvailableCategories",
-  (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      // const { data } = await axios.get<ICategory[]>("");
+      const { data } = await axios.get<Spot[]>("");
       return spots;
     } catch (error: unknown) {
       rejectWithValue(error);
+      return spots;
     }
   }
 );
@@ -57,7 +65,7 @@ const spotSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchAvailableSpots.fulfilled, (state, action) => {
-      if (action.payload) {
+      if (action.payload && action.payload instanceof SpotList) {
         state.availableSpots = action.payload;
       }
       state.loading = false;

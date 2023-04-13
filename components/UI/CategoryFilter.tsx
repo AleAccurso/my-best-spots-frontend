@@ -42,9 +42,9 @@ const CategoryFilter = () => {
 
   const countCheckedCheckboxes = () => {
     let counter = 0;
-    checkboxesConfig.map((category) => {
+    checkboxesConfig.map((config) => {
       var categoryCheckbox = document.getElementById(
-        category.category_key
+        config.category.getCategoryKey()
       ) as HTMLInputElement;
       if (categoryCheckbox !== null && categoryCheckbox.checked) {
         counter++;
@@ -59,7 +59,7 @@ const CategoryFilter = () => {
     ) as HTMLInputElement;
 
     let categoryCheckboxConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category_key === e.target.id
+      (catConfig) => catConfig.category.getCategoryKey() === e.target.id
     );
 
     if (categoryCheckbox !== null && categoryCheckboxConfig) {
@@ -88,7 +88,7 @@ const CategoryFilter = () => {
     ) as HTMLInputElement;
 
     let allConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category_key === allCategoriesKey
+      (catConfig) => catConfig.category.getCategoryKey() === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
@@ -97,7 +97,7 @@ const CategoryFilter = () => {
       } else {
         if (
           checkedNb == 0 ||
-          checkedNb === availableCategories.length
+          checkedNb === availableCategories.countCategories()
         ) {
           resetFilter();
         }
@@ -122,7 +122,7 @@ const CategoryFilter = () => {
     ) as HTMLInputElement;
 
     let allConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category_key === allCategoriesKey
+      (catConfig) => catConfig.category.getCategoryKey() === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
@@ -139,7 +139,7 @@ const CategoryFilter = () => {
     // Set the other category filters
     checkboxesConfig.map((checkboxOption) => {
       var categoryCheckbox = document.getElementById(
-        checkboxOption.category_key
+        checkboxOption.category.getCategoryKey()
       ) as HTMLInputElement;
 
       if (categoryCheckbox !== null) {
@@ -191,13 +191,13 @@ const CategoryFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          {!loading && checkboxesConfig.map((category, key) => {
+          {!loading && checkboxesConfig.map((config, key) => {
             return (
-              <li key={key} value={category.category_key}>
+              <li key={key} value={config.category.getCategoryKey()}>
                 <Checkbox
-                  id={category.category_key}
-                  label={category.category_name}
-                  isChecked={category.value}
+                  id={config.category.getCategoryKey()}
+                  label={config.category.getCategoryName()}
+                  isChecked={config.value}
                   handleSetFilter={handleSetFilter}
                 />
               </li>

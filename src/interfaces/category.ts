@@ -1,17 +1,54 @@
 export interface ICategory {
-  name: string;
+  category_name: string;
   category_key: string;
 }
 
 export interface ICategoryCheckboxOption {
-  category_key: string;
-  category_name: string;
+  category: Category;
   value: boolean;
 }
 
 export interface ICategoryFilterProps {
-  filterData : {
-    availableCategories: ICategory[];
+  filterData: {
+    availableCategories: Category[];
     checkboxesConfig: ICategoryCheckboxOption[];
   };
+}
+
+export class Category {
+  private category_name: string;
+  private category_key: string;
+
+  constructor(data: ICategory) {
+    this.category_name = data.category_name;
+    this.category_key = data.category_name;
+  }
+
+  public getCategoryName(): string {
+    return this.category_name;
+  }
+
+  public getCategoryKey(): string {
+    return this.category_key;
+  }
+}
+
+export class CategoryList {
+  private categoryList : Category[];
+
+  constructor() {
+    this.categoryList = []
+  }
+
+  public getList() : Category[] {
+    return this.categoryList
+  }
+
+  public countCategories() : number {
+    return this.categoryList.length
+  }
+
+  public addCategory(category: Category) {
+    this.categoryList.push(category)
+  }
 }
