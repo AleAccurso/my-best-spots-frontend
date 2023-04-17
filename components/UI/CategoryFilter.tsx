@@ -1,5 +1,5 @@
 // Hooks
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 // UI components
@@ -8,19 +8,23 @@ import Checkbox from "@/UI/Checkbox";
 
 // Interfaces
 import { allCategoriesKey } from "@/src/constants";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
-import { useDispatch } from "react-redux";
 
 import { filtersName } from "@/src/enums/filters";
-import { updateCheckboxStatus } from "@/src/store/reducers/filter";
+import {
+  resetFilterConfig,
+  updateCheckboxStatus,
+} from "@/src/store/reducers/filter";
+import { fetchAvailableSpots } from "@/src/store/reducers/spot";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 const CategoryFilter = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const { availableCategories, checkboxesConfig, loading} = useSelector(
-    (state: CombinedState) => state.filters.categories
-  );
+  const filterConfig = useSelector((state: CombinedState) => state.filters);
+
+  const { availableCategories, checkboxesConfig } = filterConfig.categories;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCategorySelectionFinished, setIsCategorySelectionFinished] =
@@ -32,6 +36,7 @@ const CategoryFilter = () => {
     if (isOpen && !isCategorySelectionFinished) {
       setIsOpen(false);
       setIsCategorySelectionFinished(true);
+      dispatch(fetchAvailableSpots(filterConfig));
     }
   }
 
@@ -43,11 +48,13 @@ const CategoryFilter = () => {
   const countCheckedCheckboxes = () => {
     let counter = 0;
     checkboxesConfig.map((config) => {
-      var categoryCheckbox = document.getElementById(
-        config.category.getCategoryKey()
-      ) as HTMLInputElement;
-      if (categoryCheckbox !== null && categoryCheckbox.checked) {
-        counter++;
+      if (config.category.getCategoryKey() != allCategoriesKey) {
+        var categoryCheckbox = document.getElementById(
+          config.category.getCategoryKey()
+        ) as HTMLInputElement;
+        if (categoryCheckbox !== null && categoryCheckbox.checked) {
+          counter++;
+        }
       }
     });
     return counter;
@@ -95,10 +102,9 @@ const CategoryFilter = () => {
       if (forceReset) {
         resetFilter();
       } else {
-        if (
-          checkedNb == 0 ||
-          checkedNb === availableCategories.countCategories()
-        ) {
+        const availableCategoriesCount = availableCategories.countCategories();
+
+        if (checkedNb == 0 || checkedNb === availableCategoriesCount) {
           resetFilter();
         }
 
@@ -117,43 +123,35 @@ const CategoryFilter = () => {
   };
 
   const resetFilter = () => {
-    var allCheckbox = document.getElementById(
-      allCategoriesKey
-    ) as HTMLInputElement;
-
-    let allConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category.getCategoryKey() === allCategoriesKey
-    );
-
-    if (allCheckbox && allConfig) {
-      allCheckbox.checked = true;
-      dispatch(
-        updateCheckboxStatus({
-          filter: filtersName.CATEGORY,
-          key: allCategoriesKey,
-          value: true,
-        })
-      );
-    }
-
-    // Set the other category filters
     checkboxesConfig.map((checkboxOption) => {
+      const categoryKey = checkboxOption.category.getCategoryKey();
+
       var categoryCheckbox = document.getElementById(
-        checkboxOption.category.getCategoryKey()
+        categoryKey
       ) as HTMLInputElement;
 
+      let checkedValue = false;
+
+      if (categoryKey === allCategoriesKey) {
+        checkedValue = true;
+      }
+
       if (categoryCheckbox !== null) {
-        categoryCheckbox.checked = false;
+        categoryCheckbox.checked = checkedValue;
         dispatch(
           updateCheckboxStatus({
             filter: filtersName.CATEGORY,
-            key: allCategoriesKey,
-            value: false,
+            key: categoryKey,
+            value: checkedValue,
           })
         );
       }
     });
   };
+
+  useEffect(() => {
+    dispatch(resetFilterConfig({ filter: filtersName.CATEGORY }));
+  }, [availableCategories, dispatch]);
 
   useOnClickOutside(categoryFilterRef, handleClickOutside);
 
@@ -191,13 +189,13 @@ const CategoryFilter = () => {
           className="h-56 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="dropdownSearchButton"
         >
-          {!loading && checkboxesConfig.map((config, key) => {
+          {checkboxesConfig.map((config, key) => {
             return (
               <li key={key} value={config.category.getCategoryKey()}>
                 <Checkbox
                   id={config.category.getCategoryKey()}
                   label={config.category.getCategoryName()}
-                  isChecked={config.value}
+                  isChecked={config.isChecked}
                   handleSetFilter={handleSetFilter}
                 />
               </li>

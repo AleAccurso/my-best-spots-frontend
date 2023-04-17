@@ -1,4 +1,5 @@
-import { ISpot, ISpotsState, Spot, SpotList } from "@/interfaces/spot";
+import { ISpotsState, Spot, SpotList } from "@/interfaces/spot";
+import { IFilterConfig, IFiltersState } from "@/src/interfaces/filter";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -45,9 +46,14 @@ const initialState: ISpotsState = {
 
 const fetchAvailableSpots = createAsyncThunk(
   "fetchAvailableCategories",
-  async (data, { rejectWithValue }) => {
+  async (filterState: IFiltersState, { rejectWithValue }) => {
+    const filterConfig: IFilterConfig = {
+      categories: filterState.categories.checkboxesConfig,
+      country: filterState.countries.selectedCountry,
+      regions: filterState.regions.checkboxesConfig,
+    };
     try {
-      const { data } = await axios.get<Spot[]>("");
+      const { data } = await axios.get<Spot[]>("",{data: filterConfig});
       return spots;
     } catch (error: unknown) {
       rejectWithValue(error);

@@ -13,7 +13,7 @@ export interface ISpotProps {
 }
 
 export interface ISpotsListProps {
-  spotListData: Spot[];
+  spotListData: SpotList;
 }
 
 export interface ISpotsState {

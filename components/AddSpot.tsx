@@ -94,10 +94,10 @@ const AddSpot = () => {
             value={data.category}
           >
             <option defaultValue={""}>Select a category</option>
-            {categories.map((category, key) => {
+            {categories.getList().map((category, key) => {
               return (
-                <option key={key} value={category.category_key}>
-                  {category.name}
+                <option key={key} value={category.getCategoryKey()}>
+                  {category.getCategoryName()}
                 </option>
               );
             })}

@@ -4,7 +4,11 @@ import {
   CategoryList,
   ICategoryCheckboxOption,
 } from "@/interfaces/category";
-import { IRegion, IRegionCheckboxOption } from "@/src/interfaces/region";
+import {
+  IRegionCheckboxOption,
+  Region,
+  RegionList,
+} from "@/src/interfaces/region";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { filtersName } from "@/src/enums/filters";
 import axios from "axios";
@@ -15,8 +19,9 @@ import {
   allRegionsName,
   defaultCountry,
 } from "@/src/constants";
+import { Country, countries } from "@/src/enums/countries";
 
-const categories = new CategoryList();
+export const categories = new CategoryList();
 
 categories.addCategory(
   new Category({ category_key: "cafe-bar", category_name: "Cafe - Bar" })
@@ -64,45 +69,84 @@ categories.addCategory(
   new Category({ category_key: "tourism", category_name: "Tourism" })
 );
 
-const countries = ["Belgium", "France", "Switzerland", "Italy"];
+export const northWest = new RegionList();
 
-const regions: IRegion[] = [
-  { region_key: "abruzzo", name: "Abruzzo" },
-  { region_key: "basilicata", name: "Basilicata" },
-  { region_key: "calabria", name: "Calabria" },
-  { region_key: "campania", name: "Campania" },
-  { region_key: "emilia_romagna", name: "Emilia-Romagna" },
-  { region_key: "friuli_venezia_giulia", name: "Friuli-Venezia Giulia" },
-  { region_key: "lazio", name: "Lazio" },
-  { region_key: "liguria", name: "Liguria" },
-  { region_key: "lombardia", name: "Lombardia" },
-  { region_key: "marche", name: "Marche" },
-  { region_key: "molise", name: "Molise" },
-  { region_key: "piemonte", name: "Piemonte" },
-  { region_key: "puglia", name: "Puglia" },
-  { region_key: "sardinia", name: "Sardinia" },
-  { region_key: "sicilia", name: "Sicilia" },
-  { region_key: "trentino_alto_adige", name: "Trentino Alto Adige" },
-  { region_key: "toscana", name: "Toscana" },
-  { region_key: "umbria", name: "Umbria" },
-  { region_key: "valle_aosta", name: "Valle d'Aosta" },
-  { region_key: "veneto", name: "Veneto" },
-];
+northWest.addRegion(
+  new Region({
+    region_key: "valle_aosta",
+    region_name: "Valle d'Aosta",
+  })
+);
+
+northWest.addRegion(
+  new Region({ region_key: "liguria", region_name: "Liguria" })
+);
+northWest.addRegion(
+  new Region({ region_key: "lombardia", region_name: "Lombardia" })
+);
+northWest.addRegion(
+  new Region({ region_key: "piemonte", region_name: "Piemonte" })
+);
+
+export const northEast = new RegionList();
+northEast.addRegion(
+  new Region({ region_key: "emilia_romagna", region_name: "Emilia-Romagna" })
+);
+northEast.addRegion(
+  new Region({
+    region_key: "friuli_venezia_giulia",
+    region_name: "Friuli-Venezia Giulia",
+  })
+);
+northEast.addRegion(
+  new Region({
+    region_key: "trentino_alto_adige",
+    region_name: "Trentino Alto Adige",
+  })
+);
+northEast.addRegion(
+  new Region({ region_key: "veneto", region_name: "Veneto" })
+);
+
+export const center = new RegionList();
+center.addRegion(new Region({ region_key: "toscana", region_name: "Toscana" }));
+center.addRegion(new Region({ region_key: "umbria", region_name: "Umbria" }));
+center.addRegion(new Region({ region_key: "marche", region_name: "Marche" }));
+center.addRegion(new Region({ region_key: "lazio", region_name: "Lazio" }));
+
+export const south = new RegionList();
+south.addRegion(new Region({ region_key: "abruzzo", region_name: "Abruzzo" }));
+south.addRegion(new Region({ region_key: "molise", region_name: "Molise" }));
+south.addRegion(
+  new Region({ region_key: "campania", region_name: "Campania" })
+);
+south.addRegion(new Region({ region_key: "puglia", region_name: "Puglia" }));
+south.addRegion(
+  new Region({ region_key: "basilicata", region_name: "Basilicata" })
+);
+south.addRegion(
+  new Region({ region_key: "calabria", region_name: "Calabria" })
+);
+
+export const islands = new RegionList();
+islands.addRegion(
+  new Region({ region_key: "sardinia", region_name: "Sardinia" })
+);
+islands.addRegion(
+  new Region({ region_key: "sicilia", region_name: "Sicilia" })
+);
 
 const initialState: IFiltersState = {
   categories: {
-    loading: false,
     availableCategories: new CategoryList(),
     checkboxesConfig: [],
   },
   countries: {
-    loading: false,
     availableCountries: [],
-    selectedCountry: "",
+    selectedCountry: defaultCountry,
   },
   regions: {
-    loading: false,
-    availableRegions: [],
+    availableRegions: new RegionList(),
     checkboxesConfig: [],
   },
 };
@@ -111,7 +155,7 @@ const fetchAvailableCategories = createAsyncThunk(
   "fetchAvailableCategories",
   async (data, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<Category[]>("");
+      const { data } = await axios.get<CategoryList>("");
       return categories;
     } catch (error: unknown) {
       rejectWithValue(error);
@@ -135,13 +179,45 @@ const fetchAvailableCountries = createAsyncThunk(
 
 const fetchAvailableRegions = createAsyncThunk(
   "fetchAvailableRegions",
-  async (data, { rejectWithValue }) => {
+  async (country:string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<IRegion[]>("");
-      return regions;
+      const { data } = await axios.get<RegionList>("");
+      switch (country) {
+        case Country.IT_NORTH_EAST: {
+          return northEast;
+        }
+        case Country.IT_NORTH_WEST: {
+          return northWest;
+        }
+        case Country.IT_CENTER: {
+          return center;
+        }
+        case Country.IT_SOUTH: {
+          return south;
+        }
+        case Country.IT_ISLANDS: {
+          return islands;
+        }
+      }
     } catch (error: unknown) {
       rejectWithValue(error);
-      return regions;
+      switch (country) {
+        case Country.IT_NORTH_EAST: {
+          return northEast;
+        }
+        case Country.IT_NORTH_WEST: {
+          return northWest;
+        }
+        case Country.IT_CENTER: {
+          return center;
+        }
+        case Country.IT_SOUTH: {
+          return south;
+        }
+        case Country.IT_ISLANDS: {
+          return islands;
+        }
+      }
     }
   }
 );
@@ -159,49 +235,48 @@ const filtersSlice = createSlice({
                 category_name: allCategoriesName,
                 category_key: allCategoriesKey,
               }),
-              value: true,
+              isChecked: true,
             },
           ];
-          
-          console.log("🚀 ~ resetFilter ~ availableCategories:", state.categories.availableCategories);
 
-          state.categories.availableCategories.getList().map((availableCategory) => {
-            const categoryCheckboxOption: ICategoryCheckboxOption = {
-              category: availableCategory,
-              value: false,
-            };
-            categoryCheckboxesConfig.push(categoryCheckboxOption);
-          });
+          state.categories.availableCategories
+            .getList()
+            .map((availableCategory) => {
+              const categoryCheckboxOption: ICategoryCheckboxOption = {
+                category: availableCategory,
+                isChecked: false,
+              };
+              categoryCheckboxesConfig.push(categoryCheckboxOption);
+            });
 
           state.categories.checkboxesConfig = categoryCheckboxesConfig;
         }
+
         case filtersName.REGION: {
           const regionCheckboxesConfig: IRegionCheckboxOption[] = [
             {
-              region_key: allRegionsKey,
-              region_name: allRegionsName,
-              value: true,
+              region: new Region({
+                region_name: allRegionsName,
+                region_key: allRegionsKey,
+              }),
+              isChecked: true,
             },
           ];
 
-          state.regions.availableRegions.map((region) => {
+          state.regions.availableRegions.getList().map((availableRegion) => {
             const regionCheckboxOption: IRegionCheckboxOption = {
-              region_key: region.region_key,
-              region_name: region.name,
-              value: false,
+              region: availableRegion,
+              isChecked: false,
             };
             regionCheckboxesConfig.push(regionCheckboxOption);
           });
 
           state.regions.checkboxesConfig = regionCheckboxesConfig;
         }
-        case filtersName.COUNTRY: {
-          state.countries.selectedCountry = defaultCountry;
-        }
       }
     },
-    setSelectedCountry: (state, action: PayloadAction<string>) => {
-      state.countries.selectedCountry = action.payload;
+    setSelectedCountry: (state, action: PayloadAction<{ country: string }>) => {
+      state.countries.selectedCountry = action.payload.country;
     },
     updateCheckboxStatus: (
       state,
@@ -213,49 +288,38 @@ const filtersSlice = createSlice({
             (catConfig) =>
               catConfig.category.getCategoryKey() === action.payload.key
           );
+
           if (catConfig) {
-            catConfig.value = action.payload.value;
+            catConfig.isChecked = action.payload.value;
           }
         }
         case filtersName.REGION: {
           let regionConfig = state.regions.checkboxesConfig.find(
-            (regConfig) => regConfig.region_key === action.payload.key
+            (regConfig) =>
+              regConfig.region.getRegionKey() === action.payload.key
           );
           if (regionConfig) {
-            regionConfig.value = action.payload.value;
+            regionConfig.isChecked = action.payload.value;
           }
         }
       }
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAvailableCategories.pending, (state) => {
-      state.categories.loading = true;
-    });
     builder.addCase(fetchAvailableCategories.fulfilled, (state, action) => {
       if (action.payload && action.payload instanceof CategoryList) {
         state.categories.availableCategories = action.payload;
-        console.log("🚀 ~ extra-reducer ~ availableCategories:", state.categories.availableCategories);
       }
-      state.categories.loading = false;
-    });
-    builder.addCase(fetchAvailableCountries.pending, (state) => {
-      state.countries.loading = true;
     });
     builder.addCase(fetchAvailableCountries.fulfilled, (state, action) => {
       if (action.payload) {
         state.countries.availableCountries = action.payload;
       }
-      state.countries.loading = false;
-    });
-    builder.addCase(fetchAvailableRegions.pending, (state) => {
-      state.regions.loading = true;
     });
     builder.addCase(fetchAvailableRegions.fulfilled, (state, action) => {
-      if (action.payload) {
+      if (action.payload && action.payload instanceof RegionList) {
         state.regions.availableRegions = action.payload;
       }
-      state.regions.loading = false;
     });
   },
 });

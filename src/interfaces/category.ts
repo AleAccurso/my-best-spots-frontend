@@ -5,14 +5,7 @@ export interface ICategory {
 
 export interface ICategoryCheckboxOption {
   category: Category;
-  value: boolean;
-}
-
-export interface ICategoryFilterProps {
-  filterData: {
-    availableCategories: Category[];
-    checkboxesConfig: ICategoryCheckboxOption[];
-  };
+  isChecked: boolean;
 }
 
 export class Category {
@@ -21,7 +14,7 @@ export class Category {
 
   constructor(data: ICategory) {
     this.category_name = data.category_name;
-    this.category_key = data.category_name;
+    this.category_key = data.category_key;
   }
 
   public getCategoryName(): string {

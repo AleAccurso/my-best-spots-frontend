@@ -1,5 +1,5 @@
-import { Category, CategoryList, ICategory } from "@/interfaces/category";
-import { IRegion, IRegionCheckboxOption } from "@/interfaces/region";
+import { CategoryList } from "@/interfaces/category";
+import { IRegionCheckboxOption, RegionList } from "@/interfaces/region";
 import { ICategoryCheckboxOption } from "@/interfaces/category";
 
 export interface IFilterConfig {
@@ -10,18 +10,15 @@ export interface IFilterConfig {
 
 export interface IFiltersState {
   categories: {
-    loading: boolean;
     availableCategories: CategoryList;
     checkboxesConfig: ICategoryCheckboxOption[];
   };
   countries: {
-    loading: boolean;
     availableCountries: string[];
     selectedCountry: string;
   };
   regions: {
-    loading: boolean;
-    availableRegions: IRegion[];
+    availableRegions: RegionList;
     checkboxesConfig: IRegionCheckboxOption[];
   };
 }
