@@ -15,23 +15,25 @@ import { fetchAvailableSpots } from "@/src/store/reducers/spot";
 // import MapboxMap from "./MapboxMap";
 
 const HomePage = () => {
-  const { availableSpots } = useSelector((state: CombinedState) => state.spots);
-
-  const forceReset = useSelector(
-    (state: CombinedState) => state.common.forceReset
-  );
-
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+
+  const state = useSelector((state: CombinedState) => state);
+
+  const availableSpots = state.spots.availableSpots;
+
+  const filterConfig = state.filters
+
+  const forceReset = state.common.forceReset
 
   useEffect(() => {
     if (forceReset) {
       dispatch(fetchAvailableCategories());
       dispatch(fetchAvailableCountries());
-      dispatch(fetchAvailableSpots());
+      dispatch(fetchAvailableSpots(filterConfig));
 
       dispatch(setForceReset(false));
     }
-  }, [forceReset, dispatch]);
+  }, [forceReset, filterConfig, dispatch]);
 
   return (
     <div className="homepage flex h-screen p-0 m-0">
