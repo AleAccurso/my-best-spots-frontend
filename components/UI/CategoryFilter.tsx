@@ -48,9 +48,9 @@ const CategoryFilter = () => {
   const countCheckedCheckboxes = () => {
     let counter = 0;
     checkboxesConfig.map((config) => {
-      if (config.category.getCategoryKey() != allCategoriesKey) {
+      if (config.category.category_key != allCategoriesKey) {
         var categoryCheckbox = document.getElementById(
-          config.category.getCategoryKey()
+          config.category.category_key
         ) as HTMLInputElement;
         if (categoryCheckbox !== null && categoryCheckbox.checked) {
           counter++;
@@ -66,7 +66,7 @@ const CategoryFilter = () => {
     ) as HTMLInputElement;
 
     let categoryCheckboxConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category.getCategoryKey() === e.target.id
+      (catConfig) => catConfig.category.category_key === e.target.id
     );
 
     if (categoryCheckbox !== null && categoryCheckboxConfig) {
@@ -95,14 +95,14 @@ const CategoryFilter = () => {
     ) as HTMLInputElement;
 
     let allConfig = checkboxesConfig.find(
-      (catConfig) => catConfig.category.getCategoryKey() === allCategoriesKey
+      (catConfig) => catConfig.category.category_key === allCategoriesKey
     );
 
     if (allCheckbox && allConfig) {
       if (forceReset) {
         resetFilter();
       } else {
-        const availableCategoriesCount = availableCategories.countCategories();
+        const availableCategoriesCount = availableCategories.length;
 
         if (checkedNb == 0 || checkedNb === availableCategoriesCount) {
           resetFilter();
@@ -124,7 +124,7 @@ const CategoryFilter = () => {
 
   const resetFilter = () => {
     checkboxesConfig.map((checkboxOption) => {
-      const categoryKey = checkboxOption.category.getCategoryKey();
+      const categoryKey = checkboxOption.category.category_key;
 
       var categoryCheckbox = document.getElementById(
         categoryKey
@@ -191,10 +191,10 @@ const CategoryFilter = () => {
         >
           {checkboxesConfig.map((config, key) => {
             return (
-              <li key={key} value={config.category.getCategoryKey()}>
+              <li key={key} value={config.category.category_key}>
                 <Checkbox
-                  id={config.category.getCategoryKey()}
-                  label={config.category.getCategoryName()}
+                  id={config.category.category_key}
+                  label={config.category.category_name}
                   isChecked={config.isChecked}
                   handleSetFilter={handleSetFilter}
                 />

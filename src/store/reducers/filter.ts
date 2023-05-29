@@ -1,8 +1,8 @@
 import { IFiltersState } from "@/src/interfaces/filter";
 import {
-  Category,
-  CategoryList,
-  ICategoryCheckboxOption,
+  CategoryCheckboxOption,
+  isCategoryListPagingRes,
+  CategoryListPagingRes,
 } from "@/interfaces/category";
 import {
   IRegionCheckboxOption,
@@ -20,54 +20,7 @@ import {
   defaultCountry,
 } from "@/src/constants";
 import { Country, countries } from "@/src/enums/countries";
-
-export const categories = new CategoryList();
-
-categories.addCategory(
-  new Category({ category_key: "cafe-bar", category_name: "Cafe - Bar" })
-);
-categories.addCategory(
-  new Category({ category_key: "gas-station", category_name: "Gas Station" })
-);
-categories.addCategory(
-  new Category({ category_key: "hosting", category_name: "Hosting" })
-);
-categories.addCategory(
-  new Category({ category_key: "leisure", category_name: "Leisure" })
-);
-categories.addCategory(
-  new Category({ category_key: "medical", category_name: "Medical" })
-);
-categories.addCategory(
-  new Category({
-    category_key: "private-beach",
-    category_name: "Private Beach",
-  })
-);
-categories.addCategory(
-  new Category({ category_key: "producer", category_name: "Producer" })
-);
-categories.addCategory(
-  new Category({ category_key: "public-beach", category_name: "Public Beach" })
-);
-categories.addCategory(
-  new Category({
-    category_key: "religious-site",
-    category_name: "Religious Site",
-  })
-);
-categories.addCategory(
-  new Category({ category_key: "restaurant", category_name: "Restaurant" })
-);
-categories.addCategory(
-  new Category({ category_key: "shop", category_name: "Shop" })
-);
-categories.addCategory(
-  new Category({ category_key: "thermal", category_name: "Thermal" })
-);
-categories.addCategory(
-  new Category({ category_key: "tourism", category_name: "Tourism" })
-);
+import { axiosInstance } from "@/src/hooks/axios";
 
 export const northWest = new RegionList();
 
@@ -138,7 +91,7 @@ islands.addRegion(
 
 const initialState: IFiltersState = {
   categories: {
-    availableCategories: new CategoryList(),
+    availableCategories: [],
     checkboxesConfig: [],
   },
   countries: {
@@ -155,11 +108,12 @@ const fetchAvailableCategories = createAsyncThunk(
   "fetchAvailableCategories",
   async (data, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<CategoryList>("");
-      return categories;
+      const response = (await axiosInstance()).get<CategoryListPagingRes>(
+        "/categories"
+      );
+      return (await response).data;
     } catch (error: unknown) {
       rejectWithValue(error);
-      return categories;
     }
   }
 );
@@ -179,7 +133,7 @@ const fetchAvailableCountries = createAsyncThunk(
 
 const fetchAvailableRegions = createAsyncThunk(
   "fetchAvailableRegions",
-  async (country:string, { rejectWithValue }) => {
+  async (country: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<RegionList>("");
       switch (country) {
@@ -229,25 +183,25 @@ const filtersSlice = createSlice({
     resetFilterConfig: (state, action: PayloadAction<{ filter: string }>) => {
       switch (action.payload.filter) {
         case filtersName.CATEGORY: {
-          const categoryCheckboxesConfig: ICategoryCheckboxOption[] = [
+          const categoryCheckboxesConfig: CategoryCheckboxOption[] = [
             {
-              category: new Category({
+              category: {
+                id: "",
                 category_name: allCategoriesName,
                 category_key: allCategoriesKey,
-              }),
+                icon_url: "",
+              },
               isChecked: true,
             },
           ];
 
-          state.categories.availableCategories
-            .getList()
-            .map((availableCategory) => {
-              const categoryCheckboxOption: ICategoryCheckboxOption = {
-                category: availableCategory,
-                isChecked: false,
-              };
-              categoryCheckboxesConfig.push(categoryCheckboxOption);
-            });
+          state.categories.availableCategories.map((availableCategory) => {
+            const categoryCheckboxOption: CategoryCheckboxOption = {
+              category: availableCategory,
+              isChecked: false,
+            };
+            categoryCheckboxesConfig.push(categoryCheckboxOption);
+          });
 
           state.categories.checkboxesConfig = categoryCheckboxesConfig;
         }
@@ -286,7 +240,7 @@ const filtersSlice = createSlice({
         case filtersName.CATEGORY: {
           let catConfig = state.categories.checkboxesConfig.find(
             (catConfig) =>
-              catConfig.category.getCategoryKey() === action.payload.key
+              catConfig.category.category_key === action.payload.key
           );
 
           if (catConfig) {
@@ -307,8 +261,12 @@ const filtersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailableCategories.fulfilled, (state, action) => {
-      if (action.payload && action.payload instanceof CategoryList) {
-        state.categories.availableCategories = action.payload;
+      if (typeof(action.payload) != "undefined" && isCategoryListPagingRes(action.payload)) {
+        state.categories.availableCategories = action.payload.data;
+        console.log(
+          "🚀 ~ builder.addCase ~ state.categories.availableCategories:",
+          state.categories.availableCategories
+        );
       }
     });
     builder.addCase(fetchAvailableCountries.fulfilled, (state, action) => {

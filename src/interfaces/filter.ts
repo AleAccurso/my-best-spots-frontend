@@ -1,17 +1,17 @@
-import { CategoryList } from "@/interfaces/category";
+import { Category } from "@/interfaces/category";
 import { IRegionCheckboxOption, RegionList } from "@/interfaces/region";
-import { ICategoryCheckboxOption } from "@/interfaces/category";
+import { CategoryCheckboxOption } from "@/interfaces/category";
 
 export interface IFilterConfig {
-  categories: ICategoryCheckboxOption[];
+  categories: CategoryCheckboxOption[];
   country: string;
   regions: IRegionCheckboxOption[];
 }
 
 export interface IFiltersState {
   categories: {
-    availableCategories: CategoryList;
-    checkboxesConfig: ICategoryCheckboxOption[];
+    availableCategories: Category[];
+    checkboxesConfig: CategoryCheckboxOption[];
   };
   countries: {
     availableCountries: string[];

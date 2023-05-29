@@ -192,7 +192,7 @@ const AddSpot = () => {
           Accessibility
         </span>
         <span className="text-sm">
-          Selects the people who will be able to see this new place.
+          Select the people who will be able to see this new place.
         </span>
         <div className="rightsField mt-7">
           <div className="everyoneCheck flex items-center mb-4">
