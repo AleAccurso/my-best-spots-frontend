@@ -1,8 +1,9 @@
 import { IFiltersState } from "@/src/interfaces/filter";
 import {
   CategoryCheckboxOption,
-  isCategoryListPagingRes,
-  CategoryListPagingRes,
+  isCategoryPagingResDTO,
+  CategoryPagingResDTO,
+  CategoryDTO,
 } from "@/interfaces/category";
 import {
   IRegionCheckboxOption,
@@ -108,7 +109,7 @@ const fetchAvailableCategories = createAsyncThunk(
   "fetchAvailableCategories",
   async (data, { rejectWithValue }) => {
     try {
-      const response = (await axiosInstance()).get<CategoryListPagingRes>(
+      const response = (await axiosInstance()).get<CategoryPagingResDTO>(
         "/categories"
       );
       return (await response).data;
@@ -189,7 +190,7 @@ const filtersSlice = createSlice({
                 id: "",
                 category_name: allCategoriesName,
                 category_key: allCategoriesKey,
-                icon_url: "",
+                svg_icon_content: "",
               },
               isChecked: true,
             },
@@ -261,12 +262,8 @@ const filtersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailableCategories.fulfilled, (state, action) => {
-      if (typeof(action.payload) != "undefined" && isCategoryListPagingRes(action.payload)) {
+      if (action.payload && isCategoryPagingResDTO(action.payload)) {
         state.categories.availableCategories = action.payload.data;
-        console.log(
-          "🚀 ~ builder.addCase ~ state.categories.availableCategories:",
-          state.categories.availableCategories
-        );
       }
     });
     builder.addCase(fetchAvailableCountries.fulfilled, (state, action) => {

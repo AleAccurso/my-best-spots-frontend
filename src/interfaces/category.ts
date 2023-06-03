@@ -1,36 +1,37 @@
-export interface Category {
+export interface CategoryDTO {
   id: string;
   category_name: string;
   category_key: string;
-  icon_url: string;
+  svg_icon_content: string;
 }
 
 export interface CategoryCheckboxOption {
-  category: Category;
+  category: CategoryDTO;
   isChecked: boolean;
 }
 
-export interface CategoryListPagingRes {
+export interface CategoryPagingResDTO {
   page: number;
   size: number;
   nbPages: number;
   nbResults: number;
-  data: Category[];
+  data: CategoryDTO[];
 }
 
-export function isCategory(obj: any): obj is Category {
+export function isCategory(obj: any): obj is CategoryDTO {
   return (
     "id" in obj &&
     "category_name" in obj &&
     "category_key" in obj &&
-    "icon_url" in obj
+    "svg_icon_content" in obj &&
+    Object.keys(obj).length == 4
   );
 }
 
-export function isCategoryList(obj: any): obj is Category[] {
+export function isCategoryList(obj: any): obj is CategoryDTO[] {
   let check = true;
   if (obj.data) {
-    obj.Data.foreach((objItem: any) => {
+    obj.data.foreach((objItem: any) => {
       if (!isCategory(objItem)) {
         check = false;
       }
@@ -39,9 +40,7 @@ export function isCategoryList(obj: any): obj is Category[] {
   return check;
 }
 
-export function isCategoryListPagingRes(
-  obj: any
-): obj is CategoryListPagingRes {
+export function isCategoryPagingResDTO(obj: any): obj is CategoryPagingResDTO {
   let isCatList = false;
   if (obj.data) {
     isCatList = isCategoryList(obj.data);
@@ -52,6 +51,7 @@ export function isCategoryListPagingRes(
     "nb_pages" in obj &&
     "nb_results" in obj &&
     "data" in obj &&
+    Object.keys(obj).length == 5 &&
     isCatList
   );
 }

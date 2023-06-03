@@ -21,7 +21,7 @@
 # misc
 .DS_Store
 *.pem
-my-best-spots-firebase-adminsdk-lv4hd-a0bdce729b.json
+my-best-spots-firebase.json
 
 # debug
 npm-debug.log*
