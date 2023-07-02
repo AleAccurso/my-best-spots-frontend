@@ -1,19 +1,29 @@
-import { useState } from "react";
-import { Textarea } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
+import { useForm } from "react-hook-form";
+import { SearchAddress } from "@/UI/SearchAddress";
+import { SpotAddress } from "@/src/interfaces/spotAddress";
+
+interface IAddSpotFormData {
+  name: string;
+  category: string;
+  location: SpotAddress;
+  phone: string;
+  note: string | null;
+  everyone: boolean;
+  logged_users: boolean;
+  admin: boolean;
+}
 
 const AddSpot = () => {
-  const [gpsCoord, setGpsCoord] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [data, setData] = useState({
     name: "",
     category: "",
-    address: "",
-    region: "",
+    location: {},
     phone: "",
-    latitude: 0,
-    longitude: 0,
     note: "",
     everyone: false,
     logged_users: false,
@@ -24,15 +34,35 @@ const AddSpot = () => {
     (state: CombinedState) => state.filters.categories.availableCategories
   );
 
-  const handleGpsCoord = () => {
-    setGpsCoord(!gpsCoord);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IAddSpotFormData>({
+    defaultValues: {
+      note: null,
+      everyone: false,
+      logged_users: false,
+      admin: false,
+      location: {
+        street_number: 0,
+      },
+    },
+  });
+
+  const handleCreate = async (data: IAddSpotFormData) => {
+    console.log("DATA", data);
   };
 
-  const handleInvitation = async (e: any) => {
-    e.preventDefault();
-
-    console.log("formData", data);
+  const onSubmit = (data: IAddSpotFormData) => {
+    setSubmitting(false);
+    handleCreate(data);
   };
+
+  useEffect(() => {
+    register("location", { required: true });
+  }, [register]);
 
   return (
     <div className="inviteTab flex flex-col w-640 m-auto mt-5">
@@ -41,13 +71,14 @@ const AddSpot = () => {
         Insert all the information needed to add a new place.
       </span>
       <form
-        onSubmit={handleInvitation}
+        onSubmit={handleSubmit(onSubmit)}
         className="loginForm flex flex-col my-10 bg-mywhite"
       >
         <div className="nameField flex flex-col">
           <label className="text-base font-medium">Name</label>
           <input
             className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+            {...register("name", { required: true })}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setData({
                 ...data,
@@ -64,6 +95,7 @@ const AddSpot = () => {
           <label className="text-base font-medium">Phone number</label>
           <input
             className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
+            {...register("phone", { required: true })}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setData({
                 ...data,
@@ -85,6 +117,7 @@ const AddSpot = () => {
           <select
             id="categories"
             className="text-sm rounded-lg block w-full p-3"
+            {...register("category", { required: true })}
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -94,99 +127,25 @@ const AddSpot = () => {
             value={data.category}
           >
             <option defaultValue={""}>Select a category</option>
-            {categories.getList().map((category, key) => {
+            {categories.map((category, key) => {
               return (
-                <option key={key} value={category.getCategoryKey()}>
-                  {category.getCategoryName()}
+                <option key={key} value={category.category_key}>
+                  {category.category_name}
                 </option>
               );
             })}
           </select>
         </div>
-        <span className="location text-base font-bold mt-10">Location</span>
-        <div className="inline-flex mt-3">
-          <span className="mr-3 text-sm font-medium">Address</span>
-          <label className="relative inline-flex items-center mr-5 cursor-pointer">
-            <input
-              type="checkbox"
-              value=""
-              className="sr-only peer"
-              onClick={handleGpsCoord}
-            />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-mygreen"></div>
-            <span className="ml-3 text-sm font-medium">GPS Coordinates</span>
-          </label>
-        </div>
-        {!gpsCoord ? (
-          <div className="addressField flex flex-col mt-5">
-            <label className="text-base font-medium">Full address</label>
-            <input
-              className="w-280 h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setData({
-                  ...data,
-                  address: e.target.value,
-                })
-              }
-              value={data.address}
-              type="text"
-              placeholder="Street + Number + Postal Code + City + Province + Country"
-            />
-          </div>
-        ) : (
-          <div className="flex justify-between mt-5">
-            <div className="latitudeField flex flex-col w-300">
-              <label className="text-base font-medium">Latitude</label>
-              <input
-                className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData({
-                    ...data,
-                    latitude: Number(e.target.value),
-                  })
-                }
-                value={data.latitude}
-                type="number"
-                step="0.0000001"
-                min={-90}
-                max={90}
-              />
-            </div>
-            <div className="longitudeField flex flex-col w-300">
-              <label className="text-base font-medium">Longitude</label>
-              <input
-                className="h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData({
-                    ...data,
-                    longitude: Number(e.target.value),
-                  })
-                }
-                value={data.longitude}
-                type="number"
-                step="0.0000001"
-                min={0}
-                max={180}
-              />
-            </div>
-          </div>
-        )}
-        <div className="mt-5">
-          <div className="regionField flex flex-col">
-            <label className="text-base font-medium">Region</label>
-            <input
-              className="w-280 h-50 px-3.5 rounded-xl bg-mywhite border border-mygrey"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setData({
-                  ...data,
-                  region: e.target.value,
-                })
-              }
-              value={data.region}
-              type="text"
-              placeholder="Region"
-            />
-          </div>
+        <span className="location text-base font-bold mt-10 mb-5">
+          Location
+        </span>
+        <div className="addressField">
+          <SearchAddress
+            onSelectAddress={(spotAddress) => {
+              setValue("location", spotAddress);
+            }}
+            defaultValue=""
+          />
         </div>
         <span className="accessibility text-base font-bold mt-10">
           Accessibility
@@ -200,6 +159,7 @@ const AddSpot = () => {
               id="everyone-checkbox"
               type="checkbox"
               className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
+              {...register("everyone", { required: false })}
               onClick={(e: any) =>
                 setData({
                   ...data,
@@ -219,6 +179,7 @@ const AddSpot = () => {
               id="logged-checkbox"
               type="checkbox"
               className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
+              {...register("logged_users", { required: false })}
               onClick={(e: any) =>
                 setData({
                   ...data,
@@ -238,6 +199,7 @@ const AddSpot = () => {
               id="admin-checkbox"
               type="checkbox"
               className="w-4 h-4 text-mygreen rounded focus:ring-0 focus:shadow-none ring-offset-0"
+              {...register("admin", { required: false })}
               onClick={(e: any) =>
                 setData({
                   ...data,
@@ -257,8 +219,9 @@ const AddSpot = () => {
           Personal Note
         </span>
         <div className="noteField flex flex-col">
-          <Textarea
+          <textarea
             className="flex h-150 px-3.5 rounded-xl bg-mywhite border border-mygrey mt-5"
+            {...register("note", { required: false })}
             onChange={(e: any) =>
               setData({
                 ...data,
@@ -267,14 +230,13 @@ const AddSpot = () => {
             }
             value={data.note}
             placeholder="Add a note..."
-            onResize={undefined}
-            onResizeCapture={undefined}
           />
         </div>
         <div className="flex justify-center">
           <button
             type="submit"
-            className="loginBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5 mt-10"
+            disabled={submitting}
+            className="addSpotBtn w-320 h-55 rounded-3xl bg-mygreen px-2 py-3.5 gap-1.5 mt-10"
           >
             <span className="font-bold text-mywhite">Add this spot</span>
           </button>
