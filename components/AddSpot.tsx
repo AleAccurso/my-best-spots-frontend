@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { CombinedState } from "@/src/interfaces/store";
 import { useForm } from "react-hook-form";
 import { SearchAddress } from "@/UI/SearchAddress";
 import { SpotAddress } from "@/src/interfaces/spotAddress";
+import { insertSpot } from "@/store/reducers/spot";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 
-interface IAddSpotFormData {
+export interface IAddSpotFormData {
   name: string;
   category: string;
   location: SpotAddress;
@@ -17,6 +19,8 @@ interface IAddSpotFormData {
 }
 
 const AddSpot = () => {
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+
   const [submitting, setSubmitting] = useState(false);
 
   const [data, setData] = useState({
@@ -46,13 +50,13 @@ const AddSpot = () => {
       logged_users: false,
       admin: false,
       location: {
-        street_number: 0,
+        street_number: "0",
       },
     },
   });
 
-  const handleCreate = async (data: IAddSpotFormData) => {
-    console.log("DATA", data);
+  const handleCreate = async (newSpotData: IAddSpotFormData) => {
+    dispatch(insertSpot(newSpotData));
   };
 
   const onSubmit = (data: IAddSpotFormData) => {

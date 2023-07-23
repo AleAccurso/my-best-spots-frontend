@@ -2,7 +2,7 @@ export interface CategoryDTO {
   id: string;
   category_name: string;
   category_key: string;
-  svg_icon_content: string;
+  icon_url: string;
 }
 
 export interface CategoryCheckboxOption {

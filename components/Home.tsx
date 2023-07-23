@@ -11,6 +11,7 @@ import {
 import { useEffect } from "react";
 import { setForceReset } from "@/src/store/reducers/common";
 import { fetchAvailableSpots } from "@/src/store/reducers/spot";
+import mapSpotResDTOsToISpots from "@/helpers/mapToSpotsList";
 
 // import MapboxMap from "./MapboxMap";
 
@@ -19,7 +20,8 @@ const HomePage = () => {
 
   const state = useSelector((state: CombinedState) => state);
 
-  const availableSpots = state.spots.availableSpots;
+  const availableSpotsDTOs = state.spots.availableSpots;
+  const availableSpots = mapSpotResDTOsToISpots(availableSpotsDTOs);
 
   const filterConfig = state.filters
 

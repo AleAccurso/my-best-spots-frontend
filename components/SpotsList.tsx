@@ -1,12 +1,13 @@
 import { ISpotsListProps } from "@/src/interfaces/spot";
 import Spot from "./Spot";
+import mapToSpotsList from "@/helpers/mapToSpotsList";
 
 const SpotsList = (props: ISpotsListProps) => {
   const { spotListData } = props;
-
+  
   return (
     <div className="spotList flex flex-col divide-y devide-mygrey">
-      {spotListData.getList().map((spotData, index) => {
+      {spotListData.map((spotData, index) => {
         return (
           <div key={index} className="flex flex-col">
             <Spot spotData={spotData} />

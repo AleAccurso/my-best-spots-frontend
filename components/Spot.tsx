@@ -19,25 +19,25 @@ const Spot = (props: ISpotProps) => {
 
   useEffect(() => {
     let categoryData = categories.find(
-      (category) => category.category_key === spotData.getCategory()
+      (category) => category.category_key === spotData.category_key
     );
     setCategory(categoryData);
   }, [categories, setCategory, spotData]);
 
   const toggleSharedSpot = () => {
     setIsShared(!isShared);
-    spotData.setIsShared(!spotData.getIsShared());
+    spotData.isShared = !spotData.isShared;
   };
 
   return (
     <div className="spot flex relative w-500 my-2 items-center">
-      {category && <SvgLoader svgContent={category.svg_icon_content} />}
+      {category && <SvgLoader svgContent={category.icon_url} />}
       <div className="spotInfo flex flex-col ml-3">
-        <span className="text-lg text-extrabold">{spotData.getTitle()}</span>
+        <span className="text-lg text-extrabold">{spotData.title}</span>
         <span className="text-sm">{addressToString(spotData)}</span>
       </div>
       <div className="absolute right-2 top-3">
-        {spotData.getIsShared() ? (
+        {spotData.isShared ? (
           <button>
             <ShareAdded onClick={toggleSharedSpot} />
           </button>

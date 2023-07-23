@@ -190,7 +190,7 @@ const filtersSlice = createSlice({
                 id: "",
                 category_name: allCategoriesName,
                 category_key: allCategoriesKey,
-                svg_icon_content: "",
+                icon_url: "",
               },
               isChecked: true,
             },

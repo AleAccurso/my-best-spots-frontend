@@ -1,94 +1,100 @@
+import { SpotAddressDTO } from "@/interfaces/spotAddress";
+import { CategoryDTO } from "./category";
 export interface ISpot {
+  id: string;
   title: string;
-  address: string;
+  street: string;
+  street_number: string;
   postal_code: string;
   city: string;
   country_code: string;
-  category: string;
+  category_key: string;
   isShared: boolean;
 }
 
 export interface ISpotProps {
-  spotData: Spot;
+  spotData: ISpot;
 }
 
 export interface ISpotsListProps {
-  spotListData: SpotList;
+  spotListData: ISpot[];
 }
 
 export interface ISpotsState {
-  availableSpots: SpotList;
+  availableSpots: SpotResDTO[];
   loading: boolean;
 }
 
-export class SpotList {
-  private spotsList: Spot[];
-
-  constructor() {
-    this.spotsList = [];
-  }
-
-  public getList(): Spot[] {
-    return this.spotsList;
-  }
-
-  public countSpots(): number {
-    return this.spotsList.length;
-  }
-
-  public addSpot(spot: Spot) {
-    this.spotsList.push(spot);
-  }
+export interface SpotResDTO {
+  id: string;
+  created_at: Date;
+  name: string;
+  category: CategoryDTO;
+  address: SpotAddressDTO;
+  latitude: number;
+  longitude: number;
 }
 
-export class Spot {
-  private title: string;
-  private address: string;
-  private postal_code: string;
-  private city: string;
-  private country_code: string;
-  private category: string;
-  private isShared: boolean;
+export interface SpotPagingResDTO {
+  page: number;
+  size: number;
+  nbPages: number;
+  nbResults: number;
+  data: SpotResDTO[];
+}
 
-  constructor(data: ISpot) {
-    this.title = data.title;
-    this.address = data.address;
-    this.postal_code = data.postal_code;
-    this.city = data.city;
-    this.country_code = data.country_code;
-    this.category = data.category;
-    this.isShared = data.isShared;
-  }
+export function isSpot(obj: any): obj is SpotResDTO {
+  return (
+    "id" in obj &&
+    "created_at" in obj &&
+    "name" in obj &&
+    "category" in obj &&
+    "address" in obj &&
+    "latitude" in obj &&
+    "longitude" in obj &&
+    "min_auth_group" in obj &&
+    Object.keys(obj).length == 4
+  );
+}
 
-  public getTitle() {
-    return this.title;
+export function isSpotList(obj: any): obj is SpotResDTO[] {
+  let check = true;
+  if (obj.data) {
+    obj.data.foreach((objItem: any) => {
+      if (!isSpot(objItem)) {
+        check = false;
+      }
+    });
   }
+  return check;
+}
 
-  public getAddress() {
-    return this.address;
+export function isSpotPagingResDTO(obj: any): obj is SpotPagingResDTO {
+  let isASpotList = false;
+  if (obj.data) {
+    isASpotList = isSpotList(obj.data);
   }
+  return (
+    "page" in obj &&
+    "size" in obj &&
+    "nb_pages" in obj &&
+    "nb_results" in obj &&
+    "data" in obj &&
+    Object.keys(obj).length == 5 &&
+    isASpotList
+  );
+}
 
-  public getPostalCode() {
-    return this.postal_code;
-  }
-
-  public getCity() {
-    return this.city;
-  }
-
-  public getCountryCode() {
-    return this.country_code;
-  }
-
-  public getCategory() {
-    return this.category;
-  }
-
-  public getIsShared() {
-    return this.isShared;
-  }
-
-  public setIsShared(value: boolean) {
-    this.isShared = value
-  }
+export function isCreatedSpot(obj: any): obj is SpotResDTO {
+  return (
+    "id" in obj &&
+    "created_at" in obj &&
+    "name" in obj &&
+    "category_id" in obj &&
+    "address_id" in obj &&
+    "latitude" in obj &&
+    "longitude" in obj &&
+    "min_auth_group" in obj &&
+    Object.keys(obj).length == 8
+  );
 }

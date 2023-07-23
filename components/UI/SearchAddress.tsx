@@ -64,13 +64,19 @@ function ReadySearchBox({
 
       const addressComponents = results[0].address_components;
 
+      let streetNumber = ""
+
       const street = addressComponents.filter(
         (component: any) => component.types.indexOf("route") > -1
       )[0].long_name;
-
-      const streetNumber = addressComponents.filter(
+      
+      const streetNumberComponent = addressComponents.filter(
         (component: any) => component.types.indexOf("street_number") > -1
-      )[0].long_name;
+      );
+
+      if (streetNumberComponent.length > 0){
+        streetNumber = streetNumberComponent[0].long_name;
+      }
 
       const postalCode = addressComponents.filter(
         (component: any) => component.types.indexOf("postal_code") > -1
@@ -87,11 +93,7 @@ function ReadySearchBox({
 
       const country = addressComponents.filter(
         (component: any) => component.types.indexOf("country") > -1
-      )[0].long_name;
-
-      const countryCode = addressComponents.filter(
-        (component: any) => component.types.indexOf("country") > -1
-      )[0].short_name;
+      )[0];
 
       const { lat, lng } = await getLatLng(results[0]);
       
@@ -101,8 +103,8 @@ function ReadySearchBox({
         postal_code: postalCode,
         city: city,
         region: region,
-        country_name: country,
-        country_code: countryCode,
+        country_name: country.long_name,
+        country_code: country.short_name,
         latitude: lat,
         longitude: lng,
       };
