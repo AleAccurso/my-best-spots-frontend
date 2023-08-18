@@ -2,8 +2,7 @@ import { IFiltersState } from "@/src/interfaces/filter";
 import {
   CategoryCheckboxOption,
   isCategoryPagingResDTO,
-  CategoryPagingResDTO,
-  CategoryDTO,
+  CategoryPagingResDTO
 } from "@/interfaces/category";
 import {
   IRegionCheckboxOption,
@@ -190,7 +189,6 @@ const filtersSlice = createSlice({
                 id: "",
                 category_name: allCategoriesName,
                 category_key: allCategoriesKey,
-                icon_url: "",
               },
               isChecked: true,
             },

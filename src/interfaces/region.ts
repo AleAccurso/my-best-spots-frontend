@@ -8,6 +8,11 @@ export interface IRegionCheckboxOption {
   isChecked: boolean;
 }
 
+export interface RegionCheckboxConfig {
+  region_key: string;
+  isChecked: boolean;
+}
+
 export class Region {
   private region_name: string;
   private region_key: string;

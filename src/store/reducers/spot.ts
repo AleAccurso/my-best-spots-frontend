@@ -1,8 +1,12 @@
-import { IAddSpotFormData } from '@/components/AddSpot';
-import { SpotResDTO, isCreatedSpot } from '@/interfaces/spot';
-import { ISpotsState, SpotPagingResDTO, isSpotPagingResDTO } from "@/interfaces/spot";
+import { IAddSpotFormData } from "@/components/AddSpot";
+import { SpotResDTO, isCreatedSpot } from "@/interfaces/spot";
+import {
+  ISpotsState,
+  SpotPagingResDTO,
+  isSpotPagingResDTO,
+} from "@/interfaces/spot";
 import { axiosInstance } from "@/src/hooks/axios";
-import { IFilterConfig, IFiltersState } from "@/src/interfaces/filter";
+import { FiltersConfig } from "@/src/interfaces/filter";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Router from "next/router";
 
@@ -13,14 +17,11 @@ const initialState: ISpotsState = {
 
 const fetchAvailableSpots = createAsyncThunk(
   "fetchAvailableSpots",
-  async (filterState: IFiltersState, { rejectWithValue }) => {
-    const filterConfig: IFilterConfig = {
-      categories: filterState.categories.checkboxesConfig,
-      country: filterState.countries.selectedCountry,
-      regions: filterState.regions.checkboxesConfig,
-    };
+  async (filterConfig: FiltersConfig, { rejectWithValue }) => {
     try {
-      const response = (await axiosInstance()).get<SpotPagingResDTO>("/spots");
+      const response = (await axiosInstance()).get<SpotPagingResDTO>("/spots", {
+        params: filterConfig,
+      });
       return (await response).data;
     } catch (error: unknown) {
       rejectWithValue(error);
@@ -62,7 +63,7 @@ const spotSlice = createSlice({
     });
     builder.addCase(insertSpot.fulfilled, (state, action) => {
       if (action.payload && isCreatedSpot(action.payload)) {
-        Router.push("/")
+        Router.push("/");
       }
       state.loading = false;
     });
@@ -71,4 +72,3 @@ const spotSlice = createSlice({
 
 export { fetchAvailableSpots, insertSpot };
 export default spotSlice.reducer;
-

@@ -2,11 +2,15 @@ export interface CategoryDTO {
   id: string;
   category_name: string;
   category_key: string;
-  icon_url: string;
 }
 
 export interface CategoryCheckboxOption {
   category: CategoryDTO;
+  isChecked: boolean;
+}
+
+export interface CategoryCheckboxConfig {
+  category_key: string;
   isChecked: boolean;
 }
 

@@ -1,7 +1,7 @@
 import ToShareIcon from "@/icons/to-share.svg";
 import ShareAdded from "@/icons/share-added.svg";
 import addressToString from "@/helpers/addressToString";
-import SvgLoader from "@/helpers/svgLoader";
+import getCategoryIcon from "@/helpers/categoryIcon";
 import { CombinedState } from "@/src/interfaces/store";
 import { useEffect, useState } from "react";
 import { ISpotProps } from "@/src/interfaces/spot";
@@ -31,7 +31,9 @@ const Spot = (props: ISpotProps) => {
 
   return (
     <div className="spot flex relative w-500 my-2 items-center">
-      {category && <SvgLoader svgContent={category.icon_url} />}
+      <div className="categoryIcon">
+        {getCategoryIcon(spotData.category_key)}
+      </div>
       <div className="spotInfo flex flex-col ml-3">
         <span className="text-lg text-extrabold">{spotData.title}</span>
         <span className="text-sm">{addressToString(spotData)}</span>

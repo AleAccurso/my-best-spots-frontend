@@ -18,13 +18,15 @@ import {
 } from "@/src/store/reducers/filter";
 import { fetchAvailableSpots } from "@/src/store/reducers/spot";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { FiltersConfig, IFiltersState } from "@/src/interfaces/filter";
+import { mapFilterStateToConfig } from "@/src/mappers/filters";
 
 const CategoryFilter = () => {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const filterConfig = useSelector((state: CombinedState) => state.filters);
+  const filterState = useSelector((state: CombinedState) => state.filters);
 
-  const { availableCategories, checkboxesConfig } = filterConfig.categories;
+  const { availableCategories, checkboxesConfig } = filterState.categories;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCategorySelectionFinished, setIsCategorySelectionFinished] =
@@ -36,7 +38,7 @@ const CategoryFilter = () => {
     if (isOpen && !isCategorySelectionFinished) {
       setIsOpen(false);
       setIsCategorySelectionFinished(true);
-      dispatch(fetchAvailableSpots(filterConfig));
+      dispatch(fetchAvailableSpots(mapFilterStateToConfig(filterState)));
     }
   }
 

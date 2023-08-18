@@ -19,7 +19,7 @@ export const axiosInstance = async() => {
     headers: {
       Accept: "application/json",
       // this is how u set in your code
-      //   Authorization: `Bearer ${cookies["idToken"]}`,
+      // Authorization: `Bearer ${cookies["idToken"]}`,
     },
   });
   return axiosClient;

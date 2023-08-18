@@ -1,11 +1,15 @@
-import { CategoryDTO } from "@/interfaces/category";
-import { IRegionCheckboxOption, RegionList } from "@/interfaces/region";
+import { CategoryCheckboxConfig, CategoryDTO } from "@/interfaces/category";
+import {
+  RegionCheckboxConfig,
+  IRegionCheckboxOption,
+  RegionList,
+} from "@/interfaces/region";
 import { CategoryCheckboxOption } from "@/interfaces/category";
 
-export interface IFilterConfig {
-  categories: CategoryCheckboxOption[];
+export interface FiltersConfig {
+  categories: CategoryCheckboxConfig[];
   country: string;
-  regions: IRegionCheckboxOption[];
+  regions: RegionCheckboxConfig[];
 }
 
 export interface IFiltersState {
