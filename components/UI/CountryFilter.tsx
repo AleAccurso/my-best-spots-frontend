@@ -1,5 +1,6 @@
 import { defaultCountry } from "@/src/constants";
 import { CombinedState } from "@/src/interfaces/store";
+import { mapFilterStateToConfig } from "@/src/mappers/filters";
 import {
   fetchAvailableRegions,
   setSelectedCountry,
@@ -10,9 +11,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const CountryFilter = () => {
-  const filterConfig = useSelector((state: CombinedState) => state.filters);
+  const filterState = useSelector((state: CombinedState) => state.filters);
 
-  const { availableCountries, selectedCountry } = filterConfig.countries;
+  const { availableCountries, selectedCountry } = filterState.countries;
 
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
@@ -22,8 +23,8 @@ const CountryFilter = () => {
 
   useEffect(() => {
     dispatch(fetchAvailableRegions(selectedCountry));
-    dispatch(fetchAvailableSpots(filterConfig));
-  }, [selectedCountry, filterConfig, dispatch]);
+    dispatch(fetchAvailableSpots(mapFilterStateToConfig(filterState)));
+  }, [selectedCountry, filterState, dispatch]);
 
   return (
     <div className="countryFilter relative">

@@ -18,7 +18,6 @@ import {
 } from "@/src/store/reducers/filter";
 import { fetchAvailableSpots } from "@/src/store/reducers/spot";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { FiltersConfig, IFiltersState } from "@/src/interfaces/filter";
 import { mapFilterStateToConfig } from "@/src/mappers/filters";
 
 const CategoryFilter = () => {

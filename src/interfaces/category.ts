@@ -27,8 +27,7 @@ export function isCategory(obj: any): obj is CategoryDTO {
     "id" in obj &&
     "category_name" in obj &&
     "category_key" in obj &&
-    "svg_icon_content" in obj &&
-    Object.keys(obj).length == 4
+    Object.keys(obj).length == 3
   );
 }
 
